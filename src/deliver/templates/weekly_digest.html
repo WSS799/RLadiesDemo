@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>RegWatch Weekly Digest</title>
+</head>
+<body style="font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 20px;">
+    <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px; background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+        <tr>
+            <td style="background-color: #1a365d; color: #ffffff; padding: 30px 20px; text-align: center;">
+                <h1 style="margin: 0; font-size: 24px;">RegWatch Weekly Digest</h1>
+                <p style="margin: 10px 0 0; font-size: 14px; color: #a0aec0;">{{ date_range }}</p>
+            </td>
+        </tr>
+
+        <tr>
+            <td style="padding: 20px;">
+                <p style="margin: 0 0 10px; font-size: 16px;">Hello <strong>{{ subscriber_name }}</strong>,</p>
+                <p style="margin: 0; font-size: 15px; color: #4a5568;">
+                    <strong>{{ total_critical }}</strong> critical,
+                    <strong>{{ total_important }}</strong> important,
+                    <strong>{{ total_informational }}</strong> informational items this week.
+                </p>
+            </td>
+        </tr>
+
+        {% if critical_items %}
+        <tr>
+            <td style="padding: 0 20px 20px;">
+                <h2 style="color: #e53e3e; border-bottom: 2px solid #e53e3e; padding-bottom: 5px; font-size: 18px;">CRITICAL ITEMS</h2>
+                {% for item in critical_items %}
+                <div style="border-left: 4px solid #e53e3e; padding-left: 15px; margin-bottom: 20px; background-color: #fff5f5; padding: 15px;">
+                    <h3 style="margin: 0 0 5px; font-size: 16px;"><a href="{{ item.html_url }}" style="color: #2b6cb0; text-decoration: none;">{{ item.title }}</a></h3>
+                    <p style="margin: 0 0 10px; font-size: 12px; color: #718096;">Published: {{ item.publication_date }}</p>
+                    <p style="margin: 0 0 10px; font-size: 14px; font-style: italic;">"{{ item.rationale }}"</p>
+
+                    {% if item.impact_brief %}
+                    <div style="background-color: #ffffff; padding: 10px; border: 1px solid #fed7d7; border-radius: 4px;">
+                        <h4 style="margin: 0 0 5px; font-size: 14px; color: #2d3748;">Impact Brief</h4>
+                        <p style="margin: 0 0 10px; font-size: 13px;"><strong>Summary:</strong> {{ item.impact_brief.summary }}</p>
+                        <p style="margin: 0 0 5px; font-size: 13px;"><strong>Action Steps:</strong></p>
+                        <ol style="margin: 0 0 10px; font-size: 13px; padding-left: 20px;">
+                            {% for step in item.impact_brief.action_steps %}
+                            <li>{{ step }}</li>
+                            {% endfor %}
+                        </ol>
+                        <p style="margin: 0 0 5px; font-size: 13px;"><strong>Deadline:</strong> {{ item.impact_brief.deadline }}</p>
+                        <p style="margin: 0; font-size: 13px;"><strong>Risk if ignored:</strong> <span style="color: #e53e3e;">{{ item.impact_brief.risk_if_ignored }}</span></p>
+                    </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </td>
+        </tr>
+        {% endif %}
+
+        {% if important_items %}
+        <tr>
+            <td style="padding: 0 20px 20px;">
+                <h2 style="color: #dd6b20; border-bottom: 2px solid #dd6b20; padding-bottom: 5px; font-size: 18px;">IMPORTANT ITEMS</h2>
+                {% for item in important_items %}
+                <div style="border-left: 4px solid #dd6b20; padding-left: 15px; margin-bottom: 15px; background-color: #fffaf0; padding: 15px;">
+                    <h3 style="margin: 0 0 5px; font-size: 16px;"><a href="{{ item.html_url }}" style="color: #2b6cb0; text-decoration: none;">{{ item.title }}</a></h3>
+                    <p style="margin: 0 0 10px; font-size: 12px; color: #718096;">Published: {{ item.publication_date }}</p>
+                    <p style="margin: 0 0 10px; font-size: 14px;">{{ item.rationale }}</p>
+                    <p style="margin: 0; font-size: 13px;"><strong>Action Required:</strong> {{ item.action_required }}</p>
+                </div>
+                {% endfor %}
+            </td>
+        </tr>
+        {% endif %}
+
+        {% if informational_items %}
+        <tr>
+            <td style="padding: 0 20px 20px;">
+                <h2 style="color: #718096; border-bottom: 2px solid #718096; padding-bottom: 5px; font-size: 18px;">INFORMATIONAL ITEMS</h2>
+                <ul style="list-style-type: none; padding: 0; margin: 0;">
+                {% for item in informational_items %}
+                    <li style="border-left: 4px solid #cbd5e0; padding-left: 10px; margin-bottom: 10px;">
+                        <a href="{{ item.html_url }}" style="color: #2b6cb0; text-decoration: none; font-size: 14px; font-weight: bold;">{{ item.title }}</a>
+                        <p style="margin: 5px 0 0; font-size: 13px; color: #4a5568;">{{ item.rationale }}</p>
+                    </li>
+                {% endfor %}
+                </ul>
+            </td>
+        </tr>
+        {% endif %}
+
+        <tr>
+            <td style="background-color: #edf2f7; padding: 20px; text-align: center;">
+                <p style="margin: 0; font-size: 12px; color: #718096;">Powered by CalZen AI | Regulatory intelligence for clinical trial sponsors</p>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>
