@@ -1,0 +1,30 @@
+subscriber_name: "ASCO Clinical Research"
+subscriber_email: "warda@calzen.ai"
+therapeutic_areas:
+  - "oncology"
+  - "breast cancer"
+  - "solid tumors"
+trial_phases:
+  - "Phase I"
+  - "Phase II"
+  - "Phase III"
+drug_modalities:
+  - "small molecule"
+  - "biologic"
+  - "antibody-drug conjugate"
+  - "immunotherapy"
+regulatory_domains:
+  - "IND applications"
+  - "good clinical practice"
+  - "safety reporting"
+  - "data standards"
+  - "accelerated approval"
+  - "dose optimization"
+  - "companion diagnostics"
+  - "informed consent"
+  - "IRB requirements"
+  - "clinical holds"
+  - "diversity action plans"
+  - "decentralized trials"
+jurisdictions:
+  - "United States FDA"
