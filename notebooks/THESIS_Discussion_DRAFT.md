@@ -1,0 +1,119 @@
+# Chapter 5 — Discussion (Rewrite Draft)
+
+> Interpretive chapter grounded in the verified results (notebooks 06–08, figures). Conclusions here
+> do not depend on the pending PTAU restoration; markers _[p-tau: revisit after restoration]_ flag the
+> few sentences to revisit once real phosphorylated-tau is re-introduced.
+
+---
+
+## 5.1 Summary of principal findings
+
+This study used multimodal ADNI data to identify early predictors of Alzheimer's disease and of
+conversion to dementia, under a deliberately conservative, leakage-free evaluation framework. Four
+findings stand out. First, progression to dementia could be predicted from baseline measures with good
+discrimination in impaired-spectrum cohorts (MCI→Dementia ROC-AUC ≈ 0.83; pooled CN+MCI→AD ≈ 0.88),
+but prediction of decline from full cognitive normality was substantially harder (CN→progression
+≈ 0.66–0.69). Second, the most informative predictors **shifted with disease stage**. Third, ensemble
+methods did **not** meaningfully outperform logistic regression, indicating a largely linear signal.
+Fourth, APOE4 carriage and baseline functional, metabolic, and amyloid measures predicted not only
+*whether* but *how quickly* MCI patients converted.
+
+## 5.2 Stage-dependent predictors
+
+The stratified design revealed a clinically coherent progression in the dominant predictors. Among
+cognitively normal participants, **structural and memory** measures led — hippocampal and intracranial
+volume, delayed and verbal memory (LDELTOTAL, RAVLT), and MOCA — consistent with the established view
+that medial-temporal atrophy and subtle memory change are among the earliest detectable signs of the
+disease. Among MCI participants, the strongest predictors shifted toward **daily functional decline
+(FAQ), cerebral glucose metabolism (FDG-PET), and amyloid burden (AV45, ABETA)**, reflecting a stage in
+which pathological and functional processes are more advanced and more strongly coupled to imminent
+dementia. This shift — from *structure/memory* early to *function/metabolism/pathology* later — is the
+central scientific contribution of stratifying the cohorts rather than pooling them blindly, and it
+aligns with contemporary staging models of the AD continuum. _[p-tau: revisit — with real p-tau
+restored, tau-pathology measures may feature more prominently, especially at the MCI stage.]_
+
+## 5.3 Model performance and the study hypothesis
+
+The study hypothesized that ensemble methods (e.g., Random Forest) would outperform simpler linear
+models. The evidence only partially supports this. While Random Forest and XGBoost achieved the highest
+discrimination in absolute terms, **logistic regression matched them within cross-validation
+uncertainty** across all three cohorts. The practical implication is that the predictive relationships
+in these standardized, largely continuous features are approximately linear and additive, offering
+little for nonlinear models to exploit. This is a more accurate and more defensible conclusion than a
+claim of ensemble superiority, and it has a favorable side effect: a transparent, interpretable model
+suffices, which matters for clinical translation. The comparatively weaker performance of KNN and the
+multilayer perceptron is consistent with the modest sample sizes and the tabular nature of the data.
+
+## 5.4 Timing of conversion
+
+Survival analysis extended the binary conversion question to *when* conversion occurs. Kaplan–Meier
+estimates showed markedly faster progression in APOE4 carriers (55% remained dementia-free at five
+years versus 80% in non-carriers), reinforcing APOE4's role as a determinant of both risk and tempo.
+The Cox model identified functional (FAQ), cognitive (ADAS13), and amyloid (AV45) measures as
+predictors of faster conversion, and greater hippocampal volume, memory performance, and glucose
+metabolism (FDG) as protective — a pattern that converges with the classification-based importance
+rankings and lends internal consistency to the findings.
+
+## 5.5 A methodological contribution: evaluation rigor and label quality
+
+Beyond the substantive predictors, this work makes a methodological point that is easy to overlook in
+applied machine-learning studies. Early modeling that partitioned the data at the **visit level**
+produced an optimistic early-detection accuracy (~82%) that collapsed to chance (~34% balanced
+accuracy) once individuals — rather than individual visits — were separated between training and test
+sets. Because a participant's repeated visits share near-identical features and outcome labels, naïve
+splitting allows a model to recognize individuals rather than to generalize. Relatedly, diagnostic
+**reversion** (5.8% of participants improved at least once) meant that a naïve "last-visit" outcome
+both missed genuine converters and counted transient fluctuations; a pre-specified **confirmed** outcome
+(a worse stage sustained across ≥2 visits) was required for credible labels. Reporting these effects,
+rather than concealing them, is itself a contribution: it demonstrates how ordinary data-handling
+choices can transform a chance-level model into an apparently excellent one.
+
+## 5.6 Clinical implications
+
+The parsimonious seven-variable risk score (ROC-AUC ≈ 0.81 for MCI→Dementia) shows that a small set of
+routinely available measures — led by ADAS13, FAQ, hippocampal volume, and APOE4 — captures most of the
+predictive signal available from the full multimodal panel. This is encouraging for real-world use,
+where full biomarker and imaging panels are often unavailable, and it dovetails with the finding that a
+linear model suffices. Prioritizing functional and memory assessment, together with APOE4 genotyping,
+may offer a practical, low-cost first-pass stratification of MCI patients by conversion risk.
+
+## 5.7 Limitations
+
+1. **Enrollment / volunteer bias.** ADNI preferentially recruits participants who already have
+   cognitive concern, over-representing prevalent MCI relative to a community sample. Absolute
+   conversion rates therefore overstate population risk, and the well-powered results derive largely
+   from the impaired end of the spectrum.
+2. **Under-powered CN cohort.** Confirmed CN→progression events were few (74), and conversion from
+   normality is slow (median ≈ 4 years). The modest CN-cohort performance (AUC ≈ 0.66–0.69) should be
+   read as a lower bound reflecting limited events, not as evidence that early signal is absent.
+3. **Diagnostic label noise.** Even with a confirmed-conversion definition, clinical diagnoses carry
+   inter-rater variability, and clinically implausible reversions (e.g., dementia→MCI) were present and
+   excluded as error.
+4. **Data-integrity issue (PTAU).** A preprocessing error overwrote phosphorylated tau with total tau;
+   PTAU was therefore excluded from the analyses reported here. Because it was a duplicate of TAU, its
+   removal did not affect results, but a clinically important biomarker (p-tau181) is consequently
+   absent and should be restored from source in a subsequent iteration. _[p-tau: update once restored.]_
+5. **Single-cohort, internal validation only.** All estimates derive from ADNI with cross-validation;
+   no external or independent-cohort validation was performed, limiting claims about generalizability.
+6. **Reversible transitions simplified.** Conversion was treated as effectively one-directional after
+   confirmation; a full multi-state model of reversible CN↔MCI transitions was not undertaken.
+
+## 5.8 Future directions
+
+- **Restore real p-tau** from the ADNI source and re-estimate, given its established value as an early
+  AD biomarker.
+- **External validation** in an independent, ideally community-based cohort to test generalizability
+  beyond ADNI's enrollment profile.
+- **Multi-state / competing-risks survival models** to represent reversible transitions and death as a
+  competing event.
+- **Image-based deep learning** (e.g., a convolutional network on structural or default-mode-network
+  imaging) as a complementary modality, deferred here as a separate line of work.
+- **Calibration and decision-curve analysis** to move from discrimination toward clinically actionable
+  thresholds.
+
+---
+
+### Notes for you (delete before submission)
+- Every claim traces to notebooks 06–08 and the figures; no numbers are asserted beyond what was computed.
+- The three _[p-tau: …]_ markers are the only spots to revisit after tomorrow's PTAU restoration — none
+  change the conclusions, they only potentially strengthen the tau-pathology story.
