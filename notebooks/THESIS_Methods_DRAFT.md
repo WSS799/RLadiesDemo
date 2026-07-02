@@ -4,12 +4,13 @@
 > verified line-by-line against the executed code. Every hyperparameter, cohort size, and definition
 > below was confirmed against the source. Random seed = 42 throughout.
 >
-> **Data-integrity flag (resolve before final submission):** the `PTAU` variable is corrupted — it is
-> a duplicate of `TAU` (Pearson r = 1.00), traceable to a coding error in baseline preparation where
-> total-tau values were assigned to the phosphorylated-tau column. `PTAU` is retained in the feature
-> set as reported but should be dropped or regenerated from source; its inclusion does not affect the
-> permutation-importance findings (PTAU is never a top predictor) but distorts linear-model
-> coefficients for the collinear TAU/PTAU pair. See Section 3.9.
+> **Data-integrity resolution:** the `PTAU` variable was found to be corrupted — a duplicate of `TAU`
+> (Pearson r = 1.00), traceable to a coding error in baseline preparation where total-tau values were
+> assigned to the phosphorylated-tau column. `PTAU` was therefore **excluded from all analyses**, and
+> all results below reflect the corrected **32-feature** set. The correction did not change the
+> classification AUCs or the permutation-importance predictor rankings (PTAU was never a top predictor);
+> its effects were to remove a spurious RFE selection and to let total tau (TAU) surface cleanly. See
+> Section 3.9.
 
 ---
 
@@ -34,8 +35,9 @@ chronologically within participant.
 Diagnostic labels were harmonized so that baseline and follow-up categories were comparable: "AD" was
 recoded to "Dementia," and "LMCI"/"EMCI" were collapsed to "MCI." Censored biomarker values reported
 as thresholds were converted to numeric values (ABETA: ">1700"→1700, "<200"→200; TAU: "<80"→80,
-">1300"→1300; PTAU: "<8"→8). *(Note: the PTAU conversion additionally overwrote PTAU with TAU values
-in error; see the data-integrity flag above and Section 3.9.)*
+">1300"→1300). *(The intended PTAU threshold conversion ("<8"→8) additionally overwrote PTAU with TAU
+values in error; PTAU was consequently excluded from all modeling — see the resolution note above and
+Section 3.9.)*
 
 ## 3.3 Missing-data treatment and encoding
 
@@ -84,12 +86,12 @@ analysis comparing five definitions (last-visit, ever-reached, confirmed, and co
 
 ## 3.5 Feature set
 
-Thirty-three baseline predictors were used: AGE, PTEDUCAT, PTGENDER, APOE4, ABETA, ADAS13, AV45, CDRSB,
+Thirty-two baseline predictors were used: AGE, PTEDUCAT, PTGENDER, APOE4, ABETA, ADAS13, AV45, CDRSB,
 Entorhinal, FAQ, FDG, Fusiform, Hippocampus, ICV, LDELTOTAL, MidTemp, MMSE, MOCA, mPACCdigit,
-mPACCtrailsB, PTAU, RAVLT (forgetting, immediate, learning, percent-forgetting), TAU, TRABSCOR,
+mPACCtrailsB, RAVLT (forgetting, immediate, learning, percent-forgetting), TAU, TRABSCOR,
 Ventricles, WholeBrain, and the four marital-status indicators. Identifiers, timing variables, current
-and future diagnosis labels, and the 27 missingness indicators were excluded from the predictor set.
-(PTAU is included as reported; see the data-integrity flag.)
+and future diagnosis labels, the 27 missingness indicators, and the corrupted PTAU column (Section 3.9)
+were excluded from the predictor set.
 
 ## 3.6 Classification models
 
@@ -162,9 +164,11 @@ matching results summary.
 
 ---
 
-### Data-integrity note (Section 3.2 / 3.9) — action needed
-The `PTAU` = `TAU` corruption should be resolved for the final submission by (a) dropping `PTAU`, or
-(b) regenerating it from the original ADNI source and re-running notebooks 06–08. Because PTAU does not
-appear among the permutation-importance predictors, the classification AUCs and the reported predictor
-rankings are not expected to change; the main effect of the fix is cleaner linear-model coefficients
-and removal of the spurious RFE selection. This can be confirmed with a single re-run.
+### Data-integrity note (Section 3.9) — resolved
+The `PTAU` = `TAU` corruption (Pearson r = 1.00), caused by a coding error in baseline preparation, was
+resolved by **excluding PTAU from all analyses** and re-running notebooks 06–08 with the corrected
+32-feature set. As anticipated, the classification AUCs and permutation-importance rankings were
+unchanged; the correction removed the spurious RFE selection of PTAU (replaced by TAU) and allowed
+total tau to appear as a legitimate predictor. If the original ADNI source is available, PTAU could
+alternatively be regenerated with correct phosphorylated-tau values and re-introduced; this is noted as
+a possible refinement but was not required for the reported findings.

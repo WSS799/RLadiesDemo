@@ -80,12 +80,12 @@ the receiver operating characteristic curves in _[Fig 1 — fig1_roc_cohorts.png
 
 | Model | CN → progression | MCI → Dementia | Pooled → AD |
 |---|---|---|---|
-| Logistic Regression | 0.69 ± 0.06 | 0.82 ± 0.02 | 0.87 ± 0.03 |
+| Logistic Regression | 0.68 ± 0.05 | 0.82 ± 0.02 | 0.87 ± 0.03 |
 | Random Forest | 0.66 ± 0.02 | 0.83 ± 0.03 | 0.88 ± 0.03 |
-| XGBoost | 0.70 ± 0.03 | 0.83 ± 0.04 | 0.87 ± 0.03 |
-| SVM (RBF) | 0.68 ± 0.03 | 0.81 ± 0.02 | 0.86 ± 0.03 |
-| K-Nearest Neighbors | 0.62 ± 0.05 | 0.77 ± 0.03 | 0.83 ± 0.03 |
-| Neural Network (MLP) | 0.63 ± 0.05 | 0.79 ± 0.03 | 0.84 ± 0.04 |
+| XGBoost | 0.69 ± 0.03 | 0.83 ± 0.03 | 0.87 ± 0.03 |
+| SVM (RBF) | 0.68 ± 0.03 | 0.82 ± 0.02 | 0.86 ± 0.03 |
+| K-Nearest Neighbors | 0.63 ± 0.05 | 0.79 ± 0.02 | 0.83 ± 0.04 |
+| Neural Network (MLP) | 0.66 ± 0.04 | 0.77 ± 0.03 | 0.82 ± 0.03 |
 
 Cohort n / events: CN→progression 519 / 74 (14%); MCI→Dementia 819 / 228 (28%); Pooled 1,338 / 244 (18%).
 
@@ -109,22 +109,28 @@ Elimination with logistic regression.
 | Rank | CN → progression | MCI → Dementia | Pooled → AD |
 |---|---|---|---|
 | 1 | Hippocampus | FAQ | FAQ |
-| 2 | ICV | FDG | LDELTOTAL |
-| 3 | Age | LDELTOTAL | AV45 |
-| 4 | MOCA | mPACCtrailsB | FDG |
-| 5 | LDELTOTAL | Age | ABETA |
-| 6 | RAVLT-learning | RAVLT-immediate | CDRSB |
-| 7 | ADAS13 | ADAS13 | RAVLT-immediate |
-| 8 | FDG | ABETA | mPACCtrailsB |
+| 2 | ICV | FDG | AV45 |
+| 3 | RAVLT-learning | LDELTOTAL | RAVLT-immediate |
+| 4 | Age | AV45 | LDELTOTAL |
+| 5 | TAU | Age | CDRSB |
+| 6 | LDELTOTAL | ADAS13 | FDG |
+| 7 | MOCA | ABETA | TAU |
+| 8 | RAVLT-immediate | mPACCtrailsB | ABETA |
 
 The dominant predictors shifted with disease stage. At the earliest (CN) stage, **structural and
-memory** measures led — hippocampal volume, intracranial volume, and delayed verbal memory
-(LDELTOTAL) — consistent with early medial-temporal atrophy. Closer to dementia (MCI stage), the
+memory** measures led — hippocampal volume, intracranial volume, and delayed/verbal memory
+(LDELTOTAL, RAVLT) — consistent with early medial-temporal atrophy. Closer to dementia (MCI stage), the
 strongest predictors were measures of **daily function (FAQ), brain metabolism (FDG), and amyloid
-burden (AV45, ABETA)**. Predictors that recurred across all methods (permutation importance,
-SelectKBest, and RFE) — **FAQ, mPACCtrailsB, ADAS13, and LDELTOTAL** — are considered the most robust.
-One RFE-selected feature ("Never married") is almost certainly spurious and illustrates the value of
-requiring convergence across selection methods.
+burden (AV45, ABETA)**. Total tau (TAU) also emerged as an early predictor once the corrupted PTAU
+column (a duplicate of TAU) was removed from the analysis (see Methods §3.9).
+
+Two complementary selection methods were applied to the pooled cohort: SelectKBest (ANOVA F-test) chose
+mPACCtrailsB, FAQ, ADAS13, mPACCdigit, LDELTOTAL, CDRSB, AV45, MOCA, RAVLT-immediate, and FDG; RFE
+(logistic) chose AGE, ABETA, FAQ, Hippocampus, ICV, MMSE, mPACCtrailsB, TAU, WholeBrain, and Never-married.
+**FAQ was selected by all three approaches** (permutation importance, SelectKBest, RFE), and a further
+group appeared in two of the three — **LDELTOTAL, AV45, CDRSB, FDG, RAVLT-immediate, mPACCtrailsB, ABETA,
+and TAU** — constituting the most robust predictor set. One RFE-selected feature ("Never married") is
+almost certainly spurious and illustrates the value of requiring convergence across selection methods.
 
 ## 4.6 Time to conversion (survival analysis)
 
