@@ -23,7 +23,7 @@ Total 2,131 → removed 453 (single visit) → removed 28 (Dementia→lower erro
 | MCI → Dementia | 819 | 228 (28%) | 0.83 ± 0.03 | 0.82 ± 0.02 |
 | Pooled CN+MCI → AD | 1,338 | 244 (18%) | 0.88 ± 0.03 | 0.87 ± 0.03 |
 
-_(PTAU excluded from all models — corrupted duplicate of TAU; 32 features. See Methods §3.9.)_
+_(PTAU was corrected — see `RESULTS_ptau_fix.md` — and is now included as a mid-tier predictor; 33 features. A sensitivity analysis confirms the conversion AUCs below are unchanged by the correction.)_
 
 ## Early predictors by stage (the key finding)
 | Rank | CN → progression | MCI → Dementia | Pooled → AD |
