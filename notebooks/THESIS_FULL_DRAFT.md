@@ -11,17 +11,17 @@ Date: July 2026
 ---
 
 > **Working master draft.** This document stitches the chapter drafts into one file for review. A single
-> consolidated checklist of every open item (p-tau blanks, citations, figure tasks) appears in the
-> **Author Checklist** at the end. All results are reproducible from notebooks 06–08 (random seed 42).
+> consolidated checklist of every open item appears in the **Author Checklist** at the end. All results
+> are reproducible from notebooks 06–08 (random seed 42). The CSF p-tau181 correction is complete
+> (Methods §3.9); models use 33 features.
 
 ---
 
 
 # Abstract (Draft)
 
-> Grounded in the verified results (notebooks 06–08). Bracketed **`⟦…⟧`** markers are fill-in blanks to
-> complete after phosphorylated-tau (p-tau) is restored from the ADNI source; none change the core
-> findings. A ready-to-drop sentence for each blank is suggested in the notes below.
+> Grounded in the verified results (notebooks 06–08). The p-tau fill-in blanks have been **completed**
+> following the CSF p-tau181 correction (Methods §3.9); the core findings are unchanged.
 
 ---
 
@@ -46,48 +46,41 @@ modeled — CN→progression, MCI→Dementia, and a pooled CN+MCI→AD cohort �
 regression, random forest, XGBoost, support vector machine, k-nearest neighbors, and a neural network)
 under 5-fold cross-validation with class-imbalance correction applied within training folds only. Time
 to conversion was modeled with Kaplan–Meier and Cox proportional-hazards analysis; predictor importance
-was assessed by permutation importance and two feature-selection methods. ⟦*p-tau data note:* one
-biomarker (phosphorylated tau) was **restored from source / excluded** after a preprocessing error;
-final models used ⟦N⟧ predictors.⟧
+was assessed by permutation importance and two feature-selection methods. One biomarker, CSF
+phosphorylated tau-181, had been corrupted by a preprocessing error and was corrected against the ADNI
+source before analysis; final models used 33 predictors.
 
 **Results.** Progression to dementia was predicted with good discrimination in the impaired-spectrum
 cohorts (pooled CN+MCI→AD ROC-AUC 0.88; MCI→Dementia 0.83) but poorly from full cognitive normality
-(CN→progression 0.66), reflecting a slow, low-event process. Random forest, XGBoost, and logistic
+(CN→progression 0.65–0.69), reflecting a slow, low-event process. Random forest, XGBoost, and logistic
 regression performed equivalently, indicating a largely linear predictive signal. The most informative
 predictors shifted with disease stage — from structural and memory measures (hippocampal volume,
 intracranial volume, delayed memory) at the CN stage to functional (FAQ), metabolic (FDG), and amyloid
 (AV45, ABETA) measures nearer dementia. APOE4 carriers converted markedly faster (55% remained
 dementia-free at five years versus 80% of non-carriers). A parsimonious seven-variable risk score
-approached the full models (ROC-AUC 0.81). ⟦*p-tau result:* with p-tau restored, tau-pathology measures
-ranked ⟦position/among the top predictors⟧ in the ⟦MCI / pooled⟧ cohort(s).⟧
+approached the full models (ROC-AUC 0.81). The corrected CSF p-tau181 measure entered as a mid-tier
+predictor (importance rank ≈ 11–12 of 33) and left the conversion results unchanged.
 
 **Conclusions.** Baseline multimodal measures predict AD progression with clinically useful accuracy,
 and the dominant predictors change systematically across the disease continuum. The study also
 demonstrates that participant-level evaluation and confirmed-conversion labeling are essential for
 credible estimates: naïve visit-level analysis inflated an early-detection result from chance to ~82%.
 These findings support stage-aware, interpretable models — and careful methodology — for early
-Alzheimer's risk stratification. ⟦*optional p-tau clause:* and confirm phosphorylated tau as an
-informative early biomarker when correctly measured.⟧
+Alzheimer's risk stratification, and they show that correctly measured CSF phosphorylated tau
+contributes modest, non-redundant signal beyond total tau.
 
 **Keywords:** Alzheimer's disease; mild cognitive impairment; ADNI; machine learning; conversion
 prediction; survival analysis; data leakage; biomarkers.
 
 ---
 
-### Fill-in guide (complete after p-tau restoration)
+### Note
 
-- **⟦Methods p-tau note⟧** → e.g.: *"phosphorylated tau (p-tau181), initially corrupted by a
-  preprocessing error, was regenerated from the ADNI source; final models used 33 predictors."*
-  (If you end up keeping it dropped instead: *"…was excluded; final models used 32 predictors."*)
-- **⟦N predictors⟧** → `33` if p-tau restored, `32` if left out.
-- **⟦p-tau result sentence⟧** → fill from the re-run's permutation-importance table, e.g.: *"with p-tau
-  restored, it ranked among the top five predictors in the MCI→Dementia cohort"* — **only state the rank
-  the re-run actually shows.** If p-tau does *not* rank highly, say so honestly (e.g., *"p-tau added
-  little beyond total tau"*).
-- **⟦optional conclusion clause⟧** → include only if the result supports it.
+p-tau blanks completed following the CSF p-tau181 correction (Methods §3.9): 33 predictors; corrected
+PTAU is a mid-tier predictor (rank ≈ 11–12/33) and does not change the conversion results.
 
-*Word count (excluding brackets/keywords): ~340; trim to your program's limit (commonly 250–300) if
-needed — the Background and Methods paragraphs compress most easily.*
+*Word count (excluding keywords): ~330; trim to your program's limit (commonly 250–300) if needed — the
+Background and Methods paragraphs compress most easily.*
 
 
 
@@ -285,13 +278,13 @@ results — complementing the substantive goal of identifying stage-specific ear
 > verified line-by-line against the executed code. Every hyperparameter, cohort size, and definition
 > below was confirmed against the source. Random seed = 42 throughout.
 >
-> **Data-integrity resolution:** the `PTAU` variable was found to be corrupted — a duplicate of `TAU`
-> (Pearson r = 1.00), traceable to a coding error in baseline preparation where total-tau values were
-> assigned to the phosphorylated-tau column. `PTAU` was therefore **excluded from all analyses**, and
-> all results below reflect the corrected **32-feature** set. The correction did not change the
-> classification AUCs or the permutation-importance predictor rankings (PTAU was never a top predictor);
-> its effects were to remove a spurious RFE selection and to let total tau (TAU) surface cleanly. See
-> Section 3.9.
+> **Data-integrity resolution:** the `PTAU` (CSF phosphorylated tau-181) variable was found to be
+> corrupted — total-tau detection limits (`<80/>1300`) and cross-scale imputation had been applied to it,
+> making it a near-duplicate of `TAU` (Pearson r ≈ 1.00) on the wrong (~10×) scale. It was **corrected**
+> by reconstructing observed values from the ADNI source on p-tau181's true 8–120 pg/mL scale
+> (`UPENNBIOMK_ROCHE_ELECSYS`, ADNIMERGE2) and re-imputing gaps within range; final models use the
+> corrected **33-feature** set. A sensitivity analysis (Section 3.9) confirms the correction leaves the
+> conversion AUCs unchanged; corrected PTAU enters as a mid-tier predictor. See Section 3.9.
 
 ---
 
@@ -316,9 +309,9 @@ chronologically within participant.
 Diagnostic labels were harmonized so that baseline and follow-up categories were comparable: "AD" was
 recoded to "Dementia," and "LMCI"/"EMCI" were collapsed to "MCI." Censored biomarker values reported
 as thresholds were converted to numeric values (ABETA: ">1700"→1700, "<200"→200; TAU: "<80"→80,
-">1300"→1300). *(The intended PTAU threshold conversion ("<8"→8) additionally overwrote PTAU with TAU
-values in error; PTAU was consequently excluded from all modeling — see the resolution note above and
-Section 3.9.)*
+">1300"→1300; PTAU: correctly "<8"→8, ">120"→120 after the correction described in Section 3.9). *(An
+earlier version of the pipeline had applied total-tau limits to PTAU and imputed it on the wrong scale;
+this was corrected before the analyses reported here — see Section 3.9.)*
 
 ## 3.3 Missing-data treatment and encoding
 
@@ -367,12 +360,12 @@ analysis comparing five definitions (last-visit, ever-reached, confirmed, and co
 
 ## 3.5 Feature set
 
-Thirty-two baseline predictors were used: AGE, PTEDUCAT, PTGENDER, APOE4, ABETA, ADAS13, AV45, CDRSB,
+Thirty-three baseline predictors were used: AGE, PTEDUCAT, PTGENDER, APOE4, ABETA, ADAS13, AV45, CDRSB,
 Entorhinal, FAQ, FDG, Fusiform, Hippocampus, ICV, LDELTOTAL, MidTemp, MMSE, MOCA, mPACCdigit,
-mPACCtrailsB, RAVLT (forgetting, immediate, learning, percent-forgetting), TAU, TRABSCOR,
-Ventricles, WholeBrain, and the four marital-status indicators. Identifiers, timing variables, current
-and future diagnosis labels, the 27 missingness indicators, and the corrupted PTAU column (Section 3.9)
-were excluded from the predictor set.
+mPACCtrailsB, PTAU, RAVLT (forgetting, immediate, learning, percent-forgetting), TAU, TRABSCOR,
+Ventricles, WholeBrain, and the four marital-status indicators (PTAU included after the correction in
+Section 3.9). Identifiers, timing variables, current and future diagnosis labels, and the 27
+missingness indicators were excluded from the predictor set.
 
 ## 3.6 Classification models
 
@@ -445,14 +438,20 @@ matching results summary.
 
 ---
 
-### Data-integrity note (Section 3.9) — resolved
-The `PTAU` = `TAU` corruption (Pearson r = 1.00), caused by a coding error in baseline preparation, was
-resolved by **excluding PTAU from all analyses** and re-running notebooks 06–08 with the corrected
-32-feature set. As anticipated, the classification AUCs and permutation-importance rankings were
-unchanged; the correction removed the spurious RFE selection of PTAU (replaced by TAU) and allowed
-total tau to appear as a legitimate predictor. If the original ADNI source is available, PTAU could
-alternatively be regenerated with correct phosphorylated-tau values and re-introduced; this is noted as
-a possible refinement but was not required for the reported findings.
+### Section 3.9 — PTAU data-integrity correction (resolved)
+The CSF phosphorylated-tau (PTAU, p-tau181) field had been corrupted in earlier processing in two ways:
+total-tau detection limits (`<80/>1300` rather than p-tau181's `<8/>120`) were applied, and its ~76%
+missing values were imputed on the total-tau scale — leaving PTAU a near-duplicate of TAU (r ≈ 1.00,
+median ≈ 267, max 1300, i.e. ~10× too high). It was **corrected** by reconstructing the observed
+p-tau181 values from the ADNI source (`UPENNBIOMK_ROCHE_ELECSYS`, ADNIMERGE2 R package) on the true
+8–120 pg/mL scale, matched by PTID and visit month, and re-imputing the remaining gaps with model-based
+(Random Forest) imputation restricted to the physiological range. The corrected PTAU has median 24.6,
+max 120, and r(PTAU, TAU) = 0.986 — biologically plausible and no longer a duplicate. A sensitivity
+analysis (5-fold CV, patient-level) confirmed the correction leaves the conversion AUCs essentially
+unchanged (MCI→Dementia RF 0.830→0.829; pooled 0.879→0.880), with corrected PTAU entering as a mid-tier
+predictor (RF importance rank ≈ 11–12 of 33). The correction is reported as a methodological strength:
+it restores a clinically meaningful biomarker without inflating performance and demonstrates robustness
+of the main findings.
 
 
 
@@ -541,18 +540,18 @@ the receiver operating characteristic curves in _[Fig 1 — fig1_roc_cohorts.png
 
 | Model | CN → progression | MCI → Dementia | Pooled → AD |
 |---|---|---|---|
-| Logistic Regression | 0.68 ± 0.05 | 0.82 ± 0.02 | 0.87 ± 0.03 |
-| Random Forest | 0.66 ± 0.02 | 0.83 ± 0.03 | 0.88 ± 0.03 |
-| XGBoost | 0.69 ± 0.03 | 0.83 ± 0.03 | 0.87 ± 0.03 |
-| SVM (RBF) | 0.68 ± 0.03 | 0.82 ± 0.02 | 0.86 ± 0.03 |
-| K-Nearest Neighbors | 0.63 ± 0.05 | 0.79 ± 0.02 | 0.83 ± 0.04 |
-| Neural Network (MLP) | 0.66 ± 0.04 | 0.77 ± 0.03 | 0.82 ± 0.03 |
+| Logistic Regression | 0.69 ± 0.05 | 0.82 ± 0.02 | 0.87 ± 0.03 |
+| Random Forest | 0.65 ± 0.03 | 0.83 ± 0.03 | 0.88 ± 0.03 |
+| XGBoost | 0.69 ± 0.04 | 0.82 ± 0.03 | 0.87 ± 0.03 |
+| SVM (RBF) | 0.68 ± 0.03 | 0.81 ± 0.02 | 0.86 ± 0.03 |
+| K-Nearest Neighbors | 0.64 ± 0.04 | 0.78 ± 0.03 | 0.83 ± 0.03 |
+| Neural Network (MLP) | 0.62 ± 0.05 | 0.80 ± 0.02 | 0.84 ± 0.04 |
 
 Cohort n / events: CN→progression 519 / 74 (14%); MCI→Dementia 819 / 228 (28%); Pooled 1,338 / 244 (18%).
 
 Two patterns are notable. First, discrimination increased with baseline impairment: the pooled and
 MCI cohorts achieved strong performance (AUC 0.83–0.88), whereas prediction of progression from full
-cognitive normality was substantially harder and under-powered (AUC ≈ 0.66–0.70, 74 events). Second,
+cognitive normality was substantially harder and under-powered (AUC ≈ 0.65–0.69, 74 events). Second,
 the top-performing algorithms — Random Forest, XGBoost, and Logistic Regression — were statistically
 indistinguishable, with the simple linear model matching the ensembles. This indicates that the
 predictive signal in these features is largely linear and does not require nonlinear modeling, which
@@ -571,27 +570,30 @@ Elimination with logistic regression.
 |---|---|---|---|
 | 1 | Hippocampus | FAQ | FAQ |
 | 2 | ICV | FDG | AV45 |
-| 3 | RAVLT-learning | LDELTOTAL | RAVLT-immediate |
-| 4 | Age | AV45 | LDELTOTAL |
-| 5 | TAU | Age | CDRSB |
-| 6 | LDELTOTAL | ADAS13 | FDG |
-| 7 | MOCA | ABETA | TAU |
-| 8 | RAVLT-immediate | mPACCtrailsB | ABETA |
+| 3 | MOCA | LDELTOTAL | ABETA |
+| 4 | Age | mPACCtrailsB | LDELTOTAL |
+| 5 | LDELTOTAL | ADAS13 | RAVLT-immediate |
+| 6 | MMSE | Age | FDG |
+| 7 | FDG | ABETA | CDRSB |
+| 8 | CDRSB | RAVLT-immediate | mPACCtrailsB |
 
 The dominant predictors shifted with disease stage. At the earliest (CN) stage, **structural and
-memory** measures led — hippocampal volume, intracranial volume, and delayed/verbal memory
-(LDELTOTAL, RAVLT) — consistent with early medial-temporal atrophy. Closer to dementia (MCI stage), the
-strongest predictors were measures of **daily function (FAQ), brain metabolism (FDG), and amyloid
-burden (AV45, ABETA)**. Total tau (TAU) also emerged as an early predictor once the corrupted PTAU
-column (a duplicate of TAU) was removed from the analysis (see Methods §3.9).
+memory** measures led — hippocampal volume, intracranial volume, memory (LDELTOTAL), and global
+cognition (MOCA, MMSE) — consistent with early medial-temporal atrophy. Closer to dementia (MCI stage),
+the strongest predictors were measures of **daily function (FAQ), brain metabolism (FDG), and amyloid
+burden (AV45, ABETA)**. The corrected CSF phosphorylated-tau measure (PTAU) entered the models as a
+**mid-tier predictor** (Random Forest importance rank ≈ 11–12 of 33; ranked 9th in the pooled cohort),
+consistent with its known but partly redundant relationship to total tau (Methods §3.9).
 
 Two complementary selection methods were applied to the pooled cohort: SelectKBest (ANOVA F-test) chose
 mPACCtrailsB, FAQ, ADAS13, mPACCdigit, LDELTOTAL, CDRSB, AV45, MOCA, RAVLT-immediate, and FDG; RFE
-(logistic) chose AGE, ABETA, FAQ, Hippocampus, ICV, MMSE, mPACCtrailsB, TAU, WholeBrain, and Never-married.
+(logistic) chose AGE, ABETA, FAQ, Hippocampus, ICV, mPACCtrailsB, PTAU, TAU, WholeBrain, and Never-married.
 **FAQ was selected by all three approaches** (permutation importance, SelectKBest, RFE), and a further
-group appeared in two of the three — **LDELTOTAL, AV45, CDRSB, FDG, RAVLT-immediate, mPACCtrailsB, ABETA,
-and TAU** — constituting the most robust predictor set. One RFE-selected feature ("Never married") is
-almost certainly spurious and illustrates the value of requiring convergence across selection methods.
+group appeared in two of the three — **LDELTOTAL, AV45, CDRSB, FDG, RAVLT-immediate, mPACCtrailsB, and
+ABETA** — constituting the most robust predictor set. That RFE retained both PTAU and TAU indicates
+each tau species carries some non-redundant signal once PTAU is correctly scaled. One RFE-selected
+feature ("Never married") is almost certainly spurious and illustrates the value of requiring
+convergence across selection methods.
 
 ## 4.6 Time to conversion (survival analysis)
 
@@ -648,7 +650,7 @@ disease progression.
 # Chapter 5 — Discussion (Rewrite Draft)
 
 > Interpretive chapter grounded in the verified results (notebooks 06–08, figures). Conclusions here
-> do not depend on the pending PTAU restoration; markers _[p-tau: revisit after restoration]_ flag the
+> do not depend on the PTAU correction (now completed, Methods §3.9); the former p-tau markers flag the
 > few sentences to revisit once real phosphorylated-tau is re-introduced.
 
 ---
@@ -676,8 +678,9 @@ disease. Among MCI participants, the strongest predictors shifted toward **daily
 which pathological and functional processes are more advanced and more strongly coupled to imminent
 dementia. This shift — from *structure/memory* early to *function/metabolism/pathology* later — is the
 central scientific contribution of stratifying the cohorts rather than pooling them blindly, and it
-aligns with contemporary staging models of the AD continuum. _[p-tau: revisit — with real p-tau
-restored, tau-pathology measures may feature more prominently, especially at the MCI stage.]_
+aligns with contemporary staging models of the AD continuum. Once the corrupted CSF p-tau181 measure
+was corrected (Methods §3.9), it entered the models as a mid-tier predictor rather than a leading one —
+consistent with its strong correlation with, and only partly non-redundant signal beyond, total tau.
 
 ## 5.3 Model performance and the study hypothesis
 
@@ -736,10 +739,11 @@ may offer a practical, low-cost first-pass stratification of MCI patients by con
 3. **Diagnostic label noise.** Even with a confirmed-conversion definition, clinical diagnoses carry
    inter-rater variability, and clinically implausible reversions (e.g., dementia→MCI) were present and
    excluded as error.
-4. **Data-integrity issue (PTAU).** A preprocessing error overwrote phosphorylated tau with total tau;
-   PTAU was therefore excluded from the analyses reported here. Because it was a duplicate of TAU, its
-   removal did not affect results, but a clinically important biomarker (p-tau181) is consequently
-   absent and should be restored from source in a subsequent iteration. _[p-tau: update once restored.]_
+4. **Data-integrity correction (PTAU).** A preprocessing error had placed CSF p-tau181 on the wrong
+   scale, making it a near-duplicate of total tau. This was identified and corrected against the ADNI
+   source (Methods §3.9); a sensitivity analysis confirmed the conversion results were unchanged, and
+   corrected PTAU entered as a mid-tier predictor. This is reported as a resolved data-integrity check
+   rather than a limitation, though it underscores the importance of biomarker-scale validation.
 5. **Single-cohort, internal validation only.** All estimates derive from ADNI with cross-validation;
    no external or independent-cohort validation was performed, limiting claims about generalizability.
 6. **Reversible transitions simplified.** Conversion was treated as effectively one-directional after
@@ -747,10 +751,6 @@ may offer a practical, low-cost first-pass stratification of MCI patients by con
 
 ## 5.8 Future directions
 
-- **Restore CSF phosphorylated tau** from the ADNI source and re-estimate. In the present dataset the
-  CSF p-tau field was corrupted (overwritten with total tau) and was excluded; the correct values are
-  available in the ADNIMERGE2 biomarker tables and can be reintroduced, given p-tau's established value
-  as an early AD biomarker.
 - **Incorporate plasma (blood-based) biomarkers.** ADNI now provides plasma phosphorylated tau —
   p-tau181 (Quanterix/Simoa) and p-tau217 (Fujirebio; C2N) — alongside plasma Aβ42/40, NfL, and GFAP.
   Plasma p-tau217 in particular is among the most promising minimally-invasive AD markers. A focused
@@ -770,7 +770,7 @@ may offer a practical, low-cost first-pass stratification of MCI patients by con
 
 ### Notes for you (delete before submission)
 - Every claim traces to notebooks 06–08 and the figures; no numbers are asserted beyond what was computed.
-- The three _[p-tau: …]_ markers are the only spots to revisit after tomorrow's PTAU restoration — none
+- The p-tau markers have been resolved following the CSF p-tau181 correction (Methods §3.9) — none
   change the conclusions, they only potentially strengthen the tau-pathology story.
 
 
@@ -786,7 +786,7 @@ contributions follow from the work.
 
 First, **baseline multimodal measures predict progression to dementia with clinically useful accuracy**
 in the impaired-spectrum cohorts (pooled CN+MCI→AD ROC-AUC 0.88; MCI→Dementia 0.83), while prediction
-from full cognitive normality remains genuinely hard (0.66) — an honest reflection of a slow,
+from full cognitive normality remains genuinely hard (≈ 0.65–0.69) — an honest reflection of a slow,
 low-incidence process rather than a modeling failure.
 
 Second, **the most informative predictors change with disease stage** — from structural and memory
@@ -796,16 +796,16 @@ study's central substantive finding, and it is reinforced by convergent survival
 conversion timing.
 
 Third, and most transferable, the work demonstrates that **methodology determines credibility**:
-participant-level evaluation and a confirmed-conversion outcome are not optional refinements but
-prerequisites for believable estimates. A naïve visit-level analysis produced an early-detection result
-of ~82% that collapsed to chance under a correct participant-grouped split — a cautionary result with
-implications well beyond this dataset.
+participant-level evaluation and a confirmed-conversion outcome are prerequisites for believable
+estimates. A naïve visit-level analysis produced an early-detection result of ~82% that collapsed to
+chance under a correct participant-grouped split. A parallel data-integrity check — the correction of a
+mis-scaled CSF p-tau181 field — similarly showed the value of validating inputs, and confirmed the main
+findings were robust to it.
 
 Taken together, the findings support stage-aware, interpretable models — logistic regression proved as
 accurate as ensembles — for early Alzheimer's risk stratification, and they argue for careful,
 leakage-free validation as a standard of practice. The limitations noted in Chapter 5 (enrollment bias,
-an under-powered CN cohort, single-cohort validation, and the excluded CSF p-tau biomarker) define a
-clear agenda for the next iteration of this work.
+an under-powered CN cohort, and single-cohort validation) define a clear agenda for the next iteration.
 
 ---
 
@@ -832,20 +832,8 @@ _Additional references required — see Author Checklist._
 
 # Author Checklist (open items)
 
-## A. p-tau restoration blanks (fill after CSF p-tau is restored)
-- **Abstract** (line 3): > Grounded in the verified results (notebooks 06–08). Bracketed **`⟦…⟧`** markers are fill-in blanks to
-- **Abstract** (line 30): was assessed by permutation importance and two feature-selection methods. ⟦*p-tau data note:* one
-- **Abstract** (line 32): final models used ⟦N⟧ predictors.⟧
-- **Abstract** (line 42): approached the full models (ROC-AUC 0.81). ⟦*p-tau result:* with p-tau restored, tau-pathology measures
-- **Abstract** (line 43): ranked ⟦position/among the top predictors⟧ in the ⟦MCI / pooled⟧ cohort(s).⟧
-- **Abstract** (line 50): Alzheimer's risk stratification. ⟦*optional p-tau clause:* and confirm phosphorylated tau as an
-- **Abstract** (line 60): - **⟦Methods p-tau note⟧** → e.g.: *"phosphorylated tau (p-tau181), initially corrupted by a
-- **Abstract** (line 63): - **⟦N predictors⟧** → `33` if p-tau restored, `32` if left out.
-- **Abstract** (line 64): - **⟦p-tau result sentence⟧** → fill from the re-run's permutation-importance table, e.g.: *"with p-tau
-- **Abstract** (line 68): - **⟦optional conclusion clause⟧** → include only if the result supports it.
-- **Discussion** (line 4): > do not depend on the pending PTAU restoration; markers _[p-tau: revisit after restoration]_ flag the
-- **Discussion** (line 32): aligns with contemporary staging models of the AD continuum. _[p-tau: revisit — with real p-tau
-- **Discussion** (line 95): absent and should be restored from source in a subsequent iteration. _[p-tau: update once restored.]_
+## A. p-tau — COMPLETE
+The CSF p-tau181 correction is done (Methods §3.9); 33 features; p-tau is a mid-tier predictor. No open p-tau blanks remain.
 
 ## B. Citations to add (no references were fabricated)
 - **Intro/LitReview** (line 6): > to §2.7. `[CITATION NEEDED]` marks claims that require a supporting reference — no references were
@@ -859,10 +847,10 @@ _Additional references required — see Author Checklist._
 - **Intro/LitReview** (line 161): - Every `[CITATION NEEDED]` marks a factual claim that should be supported with a reference before
 
 ## C. Figures
-- Regenerate all four figures at **300 DPI** (currently 130 DPI screen res) — one-line change in the figure script.
-- Optional: add a CONSORT-style participant-flow diagram for §4.1 and a calibration plot for the pooled model.
+- Regenerate all four figures at **300 DPI** (currently 130 DPI) — one-line change in the figure script.
+- Optional: CONSORT-style participant-flow diagram (§4.1) and a calibration plot (pooled model).
 
 ## D. Front matter / formatting
-- Fill advisor name and any program-required front matter on the title page.
-- Trim Abstract to the program word limit if required (currently ~340 words).
-- Decide hypothesis framing in §1.4 (ensemble-superiority as primary vs. secondary) with your advisor.
+- Fill advisor name and program-required front matter on the title page.
+- Trim Abstract to the program word limit if required (~330 words).
+- Confirm hypothesis framing in §1.4 with your advisor.

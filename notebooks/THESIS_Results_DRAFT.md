@@ -80,18 +80,18 @@ the receiver operating characteristic curves in _[Fig 1 — fig1_roc_cohorts.png
 
 | Model | CN → progression | MCI → Dementia | Pooled → AD |
 |---|---|---|---|
-| Logistic Regression | 0.68 ± 0.05 | 0.82 ± 0.02 | 0.87 ± 0.03 |
-| Random Forest | 0.66 ± 0.02 | 0.83 ± 0.03 | 0.88 ± 0.03 |
-| XGBoost | 0.69 ± 0.03 | 0.83 ± 0.03 | 0.87 ± 0.03 |
-| SVM (RBF) | 0.68 ± 0.03 | 0.82 ± 0.02 | 0.86 ± 0.03 |
-| K-Nearest Neighbors | 0.63 ± 0.05 | 0.79 ± 0.02 | 0.83 ± 0.04 |
-| Neural Network (MLP) | 0.66 ± 0.04 | 0.77 ± 0.03 | 0.82 ± 0.03 |
+| Logistic Regression | 0.69 ± 0.05 | 0.82 ± 0.02 | 0.87 ± 0.03 |
+| Random Forest | 0.65 ± 0.03 | 0.83 ± 0.03 | 0.88 ± 0.03 |
+| XGBoost | 0.69 ± 0.04 | 0.82 ± 0.03 | 0.87 ± 0.03 |
+| SVM (RBF) | 0.68 ± 0.03 | 0.81 ± 0.02 | 0.86 ± 0.03 |
+| K-Nearest Neighbors | 0.64 ± 0.04 | 0.78 ± 0.03 | 0.83 ± 0.03 |
+| Neural Network (MLP) | 0.62 ± 0.05 | 0.80 ± 0.02 | 0.84 ± 0.04 |
 
 Cohort n / events: CN→progression 519 / 74 (14%); MCI→Dementia 819 / 228 (28%); Pooled 1,338 / 244 (18%).
 
 Two patterns are notable. First, discrimination increased with baseline impairment: the pooled and
 MCI cohorts achieved strong performance (AUC 0.83–0.88), whereas prediction of progression from full
-cognitive normality was substantially harder and under-powered (AUC ≈ 0.66–0.70, 74 events). Second,
+cognitive normality was substantially harder and under-powered (AUC ≈ 0.65–0.69, 74 events). Second,
 the top-performing algorithms — Random Forest, XGBoost, and Logistic Regression — were statistically
 indistinguishable, with the simple linear model matching the ensembles. This indicates that the
 predictive signal in these features is largely linear and does not require nonlinear modeling, which
@@ -110,27 +110,30 @@ Elimination with logistic regression.
 |---|---|---|---|
 | 1 | Hippocampus | FAQ | FAQ |
 | 2 | ICV | FDG | AV45 |
-| 3 | RAVLT-learning | LDELTOTAL | RAVLT-immediate |
-| 4 | Age | AV45 | LDELTOTAL |
-| 5 | TAU | Age | CDRSB |
-| 6 | LDELTOTAL | ADAS13 | FDG |
-| 7 | MOCA | ABETA | TAU |
-| 8 | RAVLT-immediate | mPACCtrailsB | ABETA |
+| 3 | MOCA | LDELTOTAL | ABETA |
+| 4 | Age | mPACCtrailsB | LDELTOTAL |
+| 5 | LDELTOTAL | ADAS13 | RAVLT-immediate |
+| 6 | MMSE | Age | FDG |
+| 7 | FDG | ABETA | CDRSB |
+| 8 | CDRSB | RAVLT-immediate | mPACCtrailsB |
 
 The dominant predictors shifted with disease stage. At the earliest (CN) stage, **structural and
-memory** measures led — hippocampal volume, intracranial volume, and delayed/verbal memory
-(LDELTOTAL, RAVLT) — consistent with early medial-temporal atrophy. Closer to dementia (MCI stage), the
-strongest predictors were measures of **daily function (FAQ), brain metabolism (FDG), and amyloid
-burden (AV45, ABETA)**. Total tau (TAU) also emerged as an early predictor once the corrupted PTAU
-column (a duplicate of TAU) was removed from the analysis (see Methods §3.9).
+memory** measures led — hippocampal volume, intracranial volume, memory (LDELTOTAL), and global
+cognition (MOCA, MMSE) — consistent with early medial-temporal atrophy. Closer to dementia (MCI stage),
+the strongest predictors were measures of **daily function (FAQ), brain metabolism (FDG), and amyloid
+burden (AV45, ABETA)**. The corrected CSF phosphorylated-tau measure (PTAU) entered the models as a
+**mid-tier predictor** (Random Forest importance rank ≈ 11–12 of 33; ranked 9th in the pooled cohort),
+consistent with its known but partly redundant relationship to total tau (Methods §3.9).
 
 Two complementary selection methods were applied to the pooled cohort: SelectKBest (ANOVA F-test) chose
 mPACCtrailsB, FAQ, ADAS13, mPACCdigit, LDELTOTAL, CDRSB, AV45, MOCA, RAVLT-immediate, and FDG; RFE
-(logistic) chose AGE, ABETA, FAQ, Hippocampus, ICV, MMSE, mPACCtrailsB, TAU, WholeBrain, and Never-married.
+(logistic) chose AGE, ABETA, FAQ, Hippocampus, ICV, mPACCtrailsB, PTAU, TAU, WholeBrain, and Never-married.
 **FAQ was selected by all three approaches** (permutation importance, SelectKBest, RFE), and a further
-group appeared in two of the three — **LDELTOTAL, AV45, CDRSB, FDG, RAVLT-immediate, mPACCtrailsB, ABETA,
-and TAU** — constituting the most robust predictor set. One RFE-selected feature ("Never married") is
-almost certainly spurious and illustrates the value of requiring convergence across selection methods.
+group appeared in two of the three — **LDELTOTAL, AV45, CDRSB, FDG, RAVLT-immediate, mPACCtrailsB, and
+ABETA** — constituting the most robust predictor set. That RFE retained both PTAU and TAU indicates
+each tau species carries some non-redundant signal once PTAU is correctly scaled. One RFE-selected
+feature ("Never married") is almost certainly spurious and illustrates the value of requiring
+convergence across selection methods.
 
 ## 4.6 Time to conversion (survival analysis)
 

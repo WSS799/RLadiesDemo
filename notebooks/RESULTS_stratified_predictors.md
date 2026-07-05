@@ -19,7 +19,7 @@ Total 2,131 → removed 453 (single visit) → removed 28 (Dementia→lower erro
 
 | Cohort | n | Events | ROC-AUC (Random Forest) | ROC-AUC (Logistic) |
 |---|---|---|---|---|
-| CN → progression (MCI/Dem) | 519 | 74 (14%) | 0.66 ± 0.02 | 0.68 ± 0.05 |
+| CN → progression (MCI/Dem) | 519 | 74 (14%) | 0.65 ± 0.03 | 0.69 ± 0.05 |
 | MCI → Dementia | 819 | 228 (28%) | 0.83 ± 0.03 | 0.82 ± 0.02 |
 | Pooled CN+MCI → AD | 1,338 | 244 (18%) | 0.88 ± 0.03 | 0.87 ± 0.03 |
 
@@ -30,18 +30,18 @@ _(PTAU was corrected — see `RESULTS_ptau_fix.md` — and is now included as a 
 |---|---|---|---|
 | 1 | Hippocampus | FAQ | FAQ |
 | 2 | ICV | FDG | AV45 |
-| 3 | RAVLT.learning | LDELTOTAL | RAVLT.immediate |
-| 4 | AGE | AV45 | LDELTOTAL |
-| 5 | TAU | AGE | CDRSB |
-| 6 | LDELTOTAL | ADAS13 | FDG |
-| 7 | MOCA | ABETA | TAU |
-| 8 | RAVLT.immediate | mPACCtrailsB | ABETA |
+| 3 | MOCA | LDELTOTAL | ABETA |
+| 4 | AGE | mPACCtrailsB | LDELTOTAL |
+| 5 | LDELTOTAL | ADAS13 | RAVLT.immediate |
+| 6 | MMSE | AGE | FDG |
+| 7 | FDG | ABETA | CDRSB |
+| 8 | CDRSB | RAVLT.immediate | mPACCtrailsB |
 
 **Interpretation:** the dominant predictors *shift with disease stage*. At the **CN** stage, structural
 and memory measures lead (hippocampal volume, ICV, memory [RAVLT/LDELTOTAL], MOCA). By the **MCI** stage,
-functional decline (FAQ), brain metabolism (FDG), and amyloid (AV45/ABETA) dominate. Total tau (TAU)
-surfaces as an early predictor once the corrupted PTAU duplicate is removed. This stage-dependent
-pattern is clinically coherent and is the scientific payoff of stratifying rather than pooling blindly.
+functional decline (FAQ), brain metabolism (FDG), and amyloid (AV45/ABETA) dominate. With PTAU corrected,
+the tau biomarkers (TAU, PTAU) sit in the mid tier. This stage-dependent pattern is clinically coherent
+and is the scientific payoff of stratifying rather than pooling blindly.
 
 ## Timing — MCI→Dementia survival (Kaplan-Meier + Cox)
 Cohort: 819 MCI patients, 228 confirmed conversions, 591 right-censored.

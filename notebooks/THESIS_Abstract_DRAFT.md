@@ -1,8 +1,7 @@
 # Abstract (Draft)
 
-> Grounded in the verified results (notebooks 06–08). Bracketed **`⟦…⟧`** markers are fill-in blanks to
-> complete after phosphorylated-tau (p-tau) is restored from the ADNI source; none change the core
-> findings. A ready-to-drop sentence for each blank is suggested in the notes below.
+> Grounded in the verified results (notebooks 06–08). The p-tau fill-in blanks have been **completed**
+> following the CSF p-tau181 correction (Methods §3.9); the core findings are unchanged.
 
 ---
 
@@ -27,45 +26,38 @@ modeled — CN→progression, MCI→Dementia, and a pooled CN+MCI→AD cohort �
 regression, random forest, XGBoost, support vector machine, k-nearest neighbors, and a neural network)
 under 5-fold cross-validation with class-imbalance correction applied within training folds only. Time
 to conversion was modeled with Kaplan–Meier and Cox proportional-hazards analysis; predictor importance
-was assessed by permutation importance and two feature-selection methods. ⟦*p-tau data note:* one
-biomarker (phosphorylated tau) was **restored from source / excluded** after a preprocessing error;
-final models used ⟦N⟧ predictors.⟧
+was assessed by permutation importance and two feature-selection methods. One biomarker, CSF
+phosphorylated tau-181, had been corrupted by a preprocessing error and was corrected against the ADNI
+source before analysis; final models used 33 predictors.
 
 **Results.** Progression to dementia was predicted with good discrimination in the impaired-spectrum
 cohorts (pooled CN+MCI→AD ROC-AUC 0.88; MCI→Dementia 0.83) but poorly from full cognitive normality
-(CN→progression 0.66), reflecting a slow, low-event process. Random forest, XGBoost, and logistic
+(CN→progression 0.65–0.69), reflecting a slow, low-event process. Random forest, XGBoost, and logistic
 regression performed equivalently, indicating a largely linear predictive signal. The most informative
 predictors shifted with disease stage — from structural and memory measures (hippocampal volume,
 intracranial volume, delayed memory) at the CN stage to functional (FAQ), metabolic (FDG), and amyloid
 (AV45, ABETA) measures nearer dementia. APOE4 carriers converted markedly faster (55% remained
 dementia-free at five years versus 80% of non-carriers). A parsimonious seven-variable risk score
-approached the full models (ROC-AUC 0.81). ⟦*p-tau result:* with p-tau restored, tau-pathology measures
-ranked ⟦position/among the top predictors⟧ in the ⟦MCI / pooled⟧ cohort(s).⟧
+approached the full models (ROC-AUC 0.81). The corrected CSF p-tau181 measure entered as a mid-tier
+predictor (importance rank ≈ 11–12 of 33) and left the conversion results unchanged.
 
 **Conclusions.** Baseline multimodal measures predict AD progression with clinically useful accuracy,
 and the dominant predictors change systematically across the disease continuum. The study also
 demonstrates that participant-level evaluation and confirmed-conversion labeling are essential for
 credible estimates: naïve visit-level analysis inflated an early-detection result from chance to ~82%.
 These findings support stage-aware, interpretable models — and careful methodology — for early
-Alzheimer's risk stratification. ⟦*optional p-tau clause:* and confirm phosphorylated tau as an
-informative early biomarker when correctly measured.⟧
+Alzheimer's risk stratification, and they show that correctly measured CSF phosphorylated tau
+contributes modest, non-redundant signal beyond total tau.
 
 **Keywords:** Alzheimer's disease; mild cognitive impairment; ADNI; machine learning; conversion
 prediction; survival analysis; data leakage; biomarkers.
 
 ---
 
-### Fill-in guide (complete after p-tau restoration)
+### Note
 
-- **⟦Methods p-tau note⟧** → e.g.: *"phosphorylated tau (p-tau181), initially corrupted by a
-  preprocessing error, was regenerated from the ADNI source; final models used 33 predictors."*
-  (If you end up keeping it dropped instead: *"…was excluded; final models used 32 predictors."*)
-- **⟦N predictors⟧** → `33` if p-tau restored, `32` if left out.
-- **⟦p-tau result sentence⟧** → fill from the re-run's permutation-importance table, e.g.: *"with p-tau
-  restored, it ranked among the top five predictors in the MCI→Dementia cohort"* — **only state the rank
-  the re-run actually shows.** If p-tau does *not* rank highly, say so honestly (e.g., *"p-tau added
-  little beyond total tau"*).
-- **⟦optional conclusion clause⟧** → include only if the result supports it.
+p-tau blanks completed following the CSF p-tau181 correction (Methods §3.9): 33 predictors; corrected
+PTAU is a mid-tier predictor (rank ≈ 11–12/33) and does not change the conversion results.
 
-*Word count (excluding brackets/keywords): ~340; trim to your program's limit (commonly 250–300) if
-needed — the Background and Methods paragraphs compress most easily.*
+*Word count (excluding keywords): ~330; trim to your program's limit (commonly 250–300) if needed — the
+Background and Methods paragraphs compress most easily.*

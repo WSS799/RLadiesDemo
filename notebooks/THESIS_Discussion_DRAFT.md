@@ -1,7 +1,7 @@
 # Chapter 5 — Discussion (Rewrite Draft)
 
 > Interpretive chapter grounded in the verified results (notebooks 06–08, figures). Conclusions here
-> do not depend on the pending PTAU restoration; markers _[p-tau: revisit after restoration]_ flag the
+> do not depend on the PTAU correction (now completed, Methods §3.9); the former p-tau markers flag the
 > few sentences to revisit once real phosphorylated-tau is re-introduced.
 
 ---
@@ -29,8 +29,9 @@ disease. Among MCI participants, the strongest predictors shifted toward **daily
 which pathological and functional processes are more advanced and more strongly coupled to imminent
 dementia. This shift — from *structure/memory* early to *function/metabolism/pathology* later — is the
 central scientific contribution of stratifying the cohorts rather than pooling them blindly, and it
-aligns with contemporary staging models of the AD continuum. _[p-tau: revisit — with real p-tau
-restored, tau-pathology measures may feature more prominently, especially at the MCI stage.]_
+aligns with contemporary staging models of the AD continuum. Once the corrupted CSF p-tau181 measure
+was corrected (Methods §3.9), it entered the models as a mid-tier predictor rather than a leading one —
+consistent with its strong correlation with, and only partly non-redundant signal beyond, total tau.
 
 ## 5.3 Model performance and the study hypothesis
 
@@ -89,10 +90,11 @@ may offer a practical, low-cost first-pass stratification of MCI patients by con
 3. **Diagnostic label noise.** Even with a confirmed-conversion definition, clinical diagnoses carry
    inter-rater variability, and clinically implausible reversions (e.g., dementia→MCI) were present and
    excluded as error.
-4. **Data-integrity issue (PTAU).** A preprocessing error overwrote phosphorylated tau with total tau;
-   PTAU was therefore excluded from the analyses reported here. Because it was a duplicate of TAU, its
-   removal did not affect results, but a clinically important biomarker (p-tau181) is consequently
-   absent and should be restored from source in a subsequent iteration. _[p-tau: update once restored.]_
+4. **Data-integrity correction (PTAU).** A preprocessing error had placed CSF p-tau181 on the wrong
+   scale, making it a near-duplicate of total tau. This was identified and corrected against the ADNI
+   source (Methods §3.9); a sensitivity analysis confirmed the conversion results were unchanged, and
+   corrected PTAU entered as a mid-tier predictor. This is reported as a resolved data-integrity check
+   rather than a limitation, though it underscores the importance of biomarker-scale validation.
 5. **Single-cohort, internal validation only.** All estimates derive from ADNI with cross-validation;
    no external or independent-cohort validation was performed, limiting claims about generalizability.
 6. **Reversible transitions simplified.** Conversion was treated as effectively one-directional after
@@ -100,10 +102,6 @@ may offer a practical, low-cost first-pass stratification of MCI patients by con
 
 ## 5.8 Future directions
 
-- **Restore CSF phosphorylated tau** from the ADNI source and re-estimate. In the present dataset the
-  CSF p-tau field was corrupted (overwritten with total tau) and was excluded; the correct values are
-  available in the ADNIMERGE2 biomarker tables and can be reintroduced, given p-tau's established value
-  as an early AD biomarker.
 - **Incorporate plasma (blood-based) biomarkers.** ADNI now provides plasma phosphorylated tau —
   p-tau181 (Quanterix/Simoa) and p-tau217 (Fujirebio; C2N) — alongside plasma Aβ42/40, NfL, and GFAP.
   Plasma p-tau217 in particular is among the most promising minimally-invasive AD markers. A focused
@@ -123,5 +121,5 @@ may offer a practical, low-cost first-pass stratification of MCI patients by con
 
 ### Notes for you (delete before submission)
 - Every claim traces to notebooks 06–08 and the figures; no numbers are asserted beyond what was computed.
-- The three _[p-tau: …]_ markers are the only spots to revisit after tomorrow's PTAU restoration — none
+- The p-tau markers have been resolved following the CSF p-tau181 correction (Methods §3.9) — none
   change the conclusions, they only potentially strengthen the tau-pathology story.

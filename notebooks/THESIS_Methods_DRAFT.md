@@ -4,13 +4,13 @@
 > verified line-by-line against the executed code. Every hyperparameter, cohort size, and definition
 > below was confirmed against the source. Random seed = 42 throughout.
 >
-> **Data-integrity resolution:** the `PTAU` variable was found to be corrupted — a duplicate of `TAU`
-> (Pearson r = 1.00), traceable to a coding error in baseline preparation where total-tau values were
-> assigned to the phosphorylated-tau column. `PTAU` was therefore **excluded from all analyses**, and
-> all results below reflect the corrected **32-feature** set. The correction did not change the
-> classification AUCs or the permutation-importance predictor rankings (PTAU was never a top predictor);
-> its effects were to remove a spurious RFE selection and to let total tau (TAU) surface cleanly. See
-> Section 3.9.
+> **Data-integrity resolution:** the `PTAU` (CSF phosphorylated tau-181) variable was found to be
+> corrupted — total-tau detection limits (`<80/>1300`) and cross-scale imputation had been applied to it,
+> making it a near-duplicate of `TAU` (Pearson r ≈ 1.00) on the wrong (~10×) scale. It was **corrected**
+> by reconstructing observed values from the ADNI source on p-tau181's true 8–120 pg/mL scale
+> (`UPENNBIOMK_ROCHE_ELECSYS`, ADNIMERGE2) and re-imputing gaps within range; final models use the
+> corrected **33-feature** set. A sensitivity analysis (Section 3.9) confirms the correction leaves the
+> conversion AUCs unchanged; corrected PTAU enters as a mid-tier predictor. See Section 3.9.
 
 ---
 
@@ -35,9 +35,9 @@ chronologically within participant.
 Diagnostic labels were harmonized so that baseline and follow-up categories were comparable: "AD" was
 recoded to "Dementia," and "LMCI"/"EMCI" were collapsed to "MCI." Censored biomarker values reported
 as thresholds were converted to numeric values (ABETA: ">1700"→1700, "<200"→200; TAU: "<80"→80,
-">1300"→1300). *(The intended PTAU threshold conversion ("<8"→8) additionally overwrote PTAU with TAU
-values in error; PTAU was consequently excluded from all modeling — see the resolution note above and
-Section 3.9.)*
+">1300"→1300; PTAU: correctly "<8"→8, ">120"→120 after the correction described in Section 3.9). *(An
+earlier version of the pipeline had applied total-tau limits to PTAU and imputed it on the wrong scale;
+this was corrected before the analyses reported here — see Section 3.9.)*
 
 ## 3.3 Missing-data treatment and encoding
 
@@ -86,12 +86,12 @@ analysis comparing five definitions (last-visit, ever-reached, confirmed, and co
 
 ## 3.5 Feature set
 
-Thirty-two baseline predictors were used: AGE, PTEDUCAT, PTGENDER, APOE4, ABETA, ADAS13, AV45, CDRSB,
+Thirty-three baseline predictors were used: AGE, PTEDUCAT, PTGENDER, APOE4, ABETA, ADAS13, AV45, CDRSB,
 Entorhinal, FAQ, FDG, Fusiform, Hippocampus, ICV, LDELTOTAL, MidTemp, MMSE, MOCA, mPACCdigit,
-mPACCtrailsB, RAVLT (forgetting, immediate, learning, percent-forgetting), TAU, TRABSCOR,
-Ventricles, WholeBrain, and the four marital-status indicators. Identifiers, timing variables, current
-and future diagnosis labels, the 27 missingness indicators, and the corrupted PTAU column (Section 3.9)
-were excluded from the predictor set.
+mPACCtrailsB, PTAU, RAVLT (forgetting, immediate, learning, percent-forgetting), TAU, TRABSCOR,
+Ventricles, WholeBrain, and the four marital-status indicators (PTAU included after the correction in
+Section 3.9). Identifiers, timing variables, current and future diagnosis labels, and the 27
+missingness indicators were excluded from the predictor set.
 
 ## 3.6 Classification models
 
@@ -164,11 +164,17 @@ matching results summary.
 
 ---
 
-### Data-integrity note (Section 3.9) — resolved
-The `PTAU` = `TAU` corruption (Pearson r = 1.00), caused by a coding error in baseline preparation, was
-resolved by **excluding PTAU from all analyses** and re-running notebooks 06–08 with the corrected
-32-feature set. As anticipated, the classification AUCs and permutation-importance rankings were
-unchanged; the correction removed the spurious RFE selection of PTAU (replaced by TAU) and allowed
-total tau to appear as a legitimate predictor. If the original ADNI source is available, PTAU could
-alternatively be regenerated with correct phosphorylated-tau values and re-introduced; this is noted as
-a possible refinement but was not required for the reported findings.
+### Section 3.9 — PTAU data-integrity correction (resolved)
+The CSF phosphorylated-tau (PTAU, p-tau181) field had been corrupted in earlier processing in two ways:
+total-tau detection limits (`<80/>1300` rather than p-tau181's `<8/>120`) were applied, and its ~76%
+missing values were imputed on the total-tau scale — leaving PTAU a near-duplicate of TAU (r ≈ 1.00,
+median ≈ 267, max 1300, i.e. ~10× too high). It was **corrected** by reconstructing the observed
+p-tau181 values from the ADNI source (`UPENNBIOMK_ROCHE_ELECSYS`, ADNIMERGE2 R package) on the true
+8–120 pg/mL scale, matched by PTID and visit month, and re-imputing the remaining gaps with model-based
+(Random Forest) imputation restricted to the physiological range. The corrected PTAU has median 24.6,
+max 120, and r(PTAU, TAU) = 0.986 — biologically plausible and no longer a duplicate. A sensitivity
+analysis (5-fold CV, patient-level) confirmed the correction leaves the conversion AUCs essentially
+unchanged (MCI→Dementia RF 0.830→0.829; pooled 0.879→0.880), with corrected PTAU entering as a mid-tier
+predictor (RF importance rank ≈ 11–12 of 33). The correction is reported as a methodological strength:
+it restores a clinically meaningful biomarker without inflating performance and demonstrates robustness
+of the main findings.
