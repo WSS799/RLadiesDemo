@@ -100,8 +100,16 @@ may offer a practical, low-cost first-pass stratification of MCI patients by con
 
 ## 5.8 Future directions
 
-- **Restore real p-tau** from the ADNI source and re-estimate, given its established value as an early
-  AD biomarker.
+- **Restore CSF phosphorylated tau** from the ADNI source and re-estimate. In the present dataset the
+  CSF p-tau field was corrupted (overwritten with total tau) and was excluded; the correct values are
+  available in the ADNIMERGE2 biomarker tables and can be reintroduced, given p-tau's established value
+  as an early AD biomarker.
+- **Incorporate plasma (blood-based) biomarkers.** ADNI now provides plasma phosphorylated tau —
+  p-tau181 (Quanterix/Simoa) and p-tau217 (Fujirebio; C2N) — alongside plasma Aβ42/40, NfL, and GFAP.
+  Plasma p-tau217 in particular is among the most promising minimally-invasive AD markers. A focused
+  sub-study is warranted: in the present cohort, baseline plasma p-tau217 was available for
+  approximately 360 participants, sufficient for a bounded analysis of its incremental predictive value
+  even though coverage is currently too sparse for inclusion in the full baseline models.
 - **External validation** in an independent, ideally community-based cohort to test generalizability
   beyond ADNI's enrollment profile.
 - **Multi-state / competing-risks survival models** to represent reversible transitions and death as a
