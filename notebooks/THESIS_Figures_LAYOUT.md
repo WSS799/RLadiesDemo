@@ -11,6 +11,16 @@ Source PNGs live in `notebooks/figures/` and are reproducible from notebooks 07�
 
 ## Figure inventory & placement
 
+**Exploratory / descriptive figures** (place early — Results §4.1 or an EDA subsection):
+| Fig | File | Shows | Goes in |
+|---|---|---|---|
+| EDA-1 | `eda1_cohort_overview.png` | Baseline diagnosis, age, education, sex, APOE4, visits/patient | §4.1 |
+| EDA-2 | `eda2_feature_distributions.png` | Distributions of 16 key cognitive/MRI/biomarker features | §4.1 / EDA |
+| EDA-3 | `eda3_by_diagnosis.png` | Key features by baseline diagnosis (CN/MCI/Dementia) box plots | §4.1 / EDA |
+| EDA-4 | `eda4_correlation_matrix.png` | Correlation matrix of 26 baseline features | §4.1 / EDA |
+| EDA-5 | `eda5_predictors_by_outcome.png` | Baseline feature distributions: Converter vs Stable | §4.3 / EDA |
+
+**Results figures:**
 | Fig | File | Goes in | Referenced at |
 |---|---|---|---|
 | 1 | `fig1_roc_cohorts.png` | Results §4.4 (performance) | after Table 4.2 |
