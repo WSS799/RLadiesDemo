@@ -1,7 +1,7 @@
 # Chapter 5 — Discussion (Rewrite Draft)
 
 > Interpretive chapter grounded in the verified results (notebooks 06–08, figures). Conclusions here
-> do not depend on the PTAU correction (now completed, Methods §3.9); the former p-tau markers flag the
+> do not depend on the PTAU correction (now completed, Methods §3.12); the former p-tau markers flag the
 > few sentences to revisit once real phosphorylated-tau is re-introduced.
 
 ---
@@ -30,7 +30,7 @@ which pathological and functional processes are more advanced and more strongly 
 dementia. This shift — from *structure/memory* early to *function/metabolism/pathology* later — is the
 central scientific contribution of stratifying the cohorts rather than pooling them blindly, and it
 aligns with contemporary staging models of the AD continuum. Once the corrupted CSF p-tau181 measure
-was corrected (Methods §3.9), it entered the models as a mid-tier predictor rather than a leading one —
+was corrected (Methods §3.12), it entered the models as a mid-tier predictor rather than a leading one —
 consistent with its strong correlation with, and only partly non-redundant signal beyond, total tau.
 
 ## 5.3 Model performance and the study hypothesis
@@ -92,7 +92,7 @@ may offer a practical, low-cost first-pass stratification of MCI patients by con
    excluded as error.
 4. **Data-integrity correction (PTAU).** A preprocessing error had placed CSF p-tau181 on the wrong
    scale, making it a near-duplicate of total tau. This was identified and corrected against the ADNI
-   source (Methods §3.9); a sensitivity analysis confirmed the conversion results were unchanged, and
+   source (Methods §3.12); a sensitivity analysis confirmed the conversion results were unchanged, and
    corrected PTAU entered as a mid-tier predictor. This is reported as a resolved data-integrity check
    rather than a limitation, though it underscores the importance of biomarker-scale validation.
 5. **Single-cohort, internal validation only.** All estimates derive from ADNI with cross-validation;
@@ -121,5 +121,5 @@ may offer a practical, low-cost first-pass stratification of MCI patients by con
 
 ### Notes for you (delete before submission)
 - Every claim traces to notebooks 06–08 and the figures; no numbers are asserted beyond what was computed.
-- The p-tau markers have been resolved following the CSF p-tau181 correction (Methods §3.9) — none
+- The p-tau markers have been resolved following the CSF p-tau181 correction (Methods §3.12) — none
   change the conclusions, they only potentially strengthen the tau-pathology story.

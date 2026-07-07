@@ -117,8 +117,8 @@ FDG-PET for glucose metabolism, and amyloid-PET (e.g., AV45) for plaque burden. 
 reduced amyloid-beta (ABETA) and elevated total and phosphorylated tau (TAU, p-tau), which change early
 in the disease course. **Neuropsychological testing** — instruments such as ADAS-Cog, MMSE, MoCA, RAVLT,
 the FAQ, and CDR-SB that quantify cognitive and functional status. The present study draws on all three
-streams. _(Note: phosphorylated tau was excluded from the analyses reported here owing to a data
-preprocessing error and is slated for restoration; see Methods §3.9.)_
+streams. _(Note: CSF phosphorylated tau was initially corrupted by a preprocessing error and was
+corrected against the ADNI source before analysis; see Methods §3.12.)_
 
 ## 2.5 Benefits of early diagnosis
 

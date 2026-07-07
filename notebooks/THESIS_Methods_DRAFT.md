@@ -9,8 +9,8 @@
 > making it a near-duplicate of `TAU` (Pearson r ≈ 1.00) on the wrong (~10×) scale. It was **corrected**
 > by reconstructing observed values from the ADNI source on p-tau181's true 8–120 pg/mL scale
 > (`UPENNBIOMK_ROCHE_ELECSYS`, ADNIMERGE2) and re-imputing gaps within range; final models use the
-> corrected **33-feature** set. A sensitivity analysis (Section 3.9) confirms the correction leaves the
-> conversion AUCs unchanged; corrected PTAU enters as a mid-tier predictor. See Section 3.9.
+> corrected **33-feature** set. A sensitivity analysis (Section 3.12) confirms the correction leaves the
+> conversion AUCs unchanged; corrected PTAU enters as a mid-tier predictor. See Section 3.12.
 
 ---
 
@@ -35,9 +35,9 @@ chronologically within participant.
 Diagnostic labels were harmonized so that baseline and follow-up categories were comparable: "AD" was
 recoded to "Dementia," and "LMCI"/"EMCI" were collapsed to "MCI." Censored biomarker values reported
 as thresholds were converted to numeric values (ABETA: ">1700"→1700, "<200"→200; TAU: "<80"→80,
-">1300"→1300; PTAU: correctly "<8"→8, ">120"→120 after the correction described in Section 3.9). *(An
+">1300"→1300; PTAU: correctly "<8"→8, ">120"→120 after the correction described in Section 3.12). *(An
 earlier version of the pipeline had applied total-tau limits to PTAU and imputed it on the wrong scale;
-this was corrected before the analyses reported here — see Section 3.9.)*
+this was corrected before the analyses reported here — see Section 3.12.)*
 
 ## 3.3 Missing-data treatment and encoding
 
@@ -90,7 +90,7 @@ Thirty-three baseline predictors were used: AGE, PTEDUCAT, PTGENDER, APOE4, ABET
 Entorhinal, FAQ, FDG, Fusiform, Hippocampus, ICV, LDELTOTAL, MidTemp, MMSE, MOCA, mPACCdigit,
 mPACCtrailsB, PTAU, RAVLT (forgetting, immediate, learning, percent-forgetting), TAU, TRABSCOR,
 Ventricles, WholeBrain, and the four marital-status indicators (PTAU included after the correction in
-Section 3.9). Identifiers, timing variables, current and future diagnosis labels, and the 27
+Section 3.12). Identifiers, timing variables, current and future diagnosis labels, and the 27
 missingness indicators were excluded from the predictor set.
 
 ## 3.6 Classification models
@@ -164,7 +164,7 @@ matching results summary.
 
 ---
 
-### Section 3.9 — PTAU data-integrity correction (resolved)
+## 3.12 Data-integrity correction: CSF p-tau (PTAU)
 The CSF phosphorylated-tau (PTAU, p-tau181) field had been corrupted in earlier processing in two ways:
 total-tau detection limits (`<80/>1300` rather than p-tau181's `<8/>120`) were applied, and its ~76%
 missing values were imputed on the total-tau scale — leaving PTAU a near-duplicate of TAU (r ≈ 1.00,

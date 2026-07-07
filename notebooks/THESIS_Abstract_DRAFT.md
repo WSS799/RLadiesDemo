@@ -1,7 +1,7 @@
 # Abstract (Draft)
 
 > Grounded in the verified results (notebooks 06–08). The p-tau fill-in blanks have been **completed**
-> following the CSF p-tau181 correction (Methods §3.9); the core findings are unchanged.
+> following the CSF p-tau181 correction (Methods §3.12); the core findings are unchanged.
 
 ---
 
@@ -56,7 +56,7 @@ prediction; survival analysis; data leakage; biomarkers.
 
 ### Note
 
-p-tau blanks completed following the CSF p-tau181 correction (Methods §3.9): 33 predictors; corrected
+p-tau blanks completed following the CSF p-tau181 correction (Methods §3.12): 33 predictors; corrected
 PTAU is a mid-tier predictor (rank ≈ 11–12/33) and does not change the conversion results.
 
 *Word count (excluding keywords): ~330; trim to your program's limit (commonly 250–300) if needed — the

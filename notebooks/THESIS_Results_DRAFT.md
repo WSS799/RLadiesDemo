@@ -123,7 +123,7 @@ cognition (MOCA, MMSE) — consistent with early medial-temporal atrophy. Closer
 the strongest predictors were measures of **daily function (FAQ), brain metabolism (FDG), and amyloid
 burden (AV45, ABETA)**. The corrected CSF phosphorylated-tau measure (PTAU) entered the models as a
 **mid-tier predictor** (Random Forest importance rank ≈ 11–12 of 33; ranked 9th in the pooled cohort),
-consistent with its known but partly redundant relationship to total tau (Methods §3.9).
+consistent with its known but partly redundant relationship to total tau (Methods §3.12).
 
 Two complementary selection methods were applied to the pooled cohort: SelectKBest (ANOVA F-test) chose
 mPACCtrailsB, FAQ, ADAS13, mPACCdigit, LDELTOTAL, CDRSB, AV45, MOCA, RAVLT-immediate, and FDG; RFE

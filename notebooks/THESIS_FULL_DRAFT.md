@@ -1,31 +1,54 @@
 # Predicting Alzheimer's Disease Progression with Machine Learning
 ### Early, Leakage-Free Prediction of Diagnosis and Conversion from Multimodal ADNI Data
-
-**A thesis submitted in partial fulfillment of the requirements for the**
-**Master of Science in Data Science, Northwestern University**
-
-Author: Warda Saeed
-Advisor: _[name]_
-Date: July 2026
-
----
-
-> **Working master draft.** This document stitches the chapter drafts into one file for review. A single
-> consolidated checklist of every open item appears in the **Author Checklist** at the end. All results
-> are reproducible from notebooks 06–08 (random seed 42). The CSF p-tau181 correction is complete
-> (Methods §3.9); models use 33 features.
+> **Working master draft** (front matter now included, formatted to the SCS/MSPA guidelines). All results
+> reproducible from notebooks 06–08 (seed 42); CSF p-tau181 correction complete (Methods §3.12); 33 features.
 
 ---
 
 
-# Abstract (Draft)
 
-> Grounded in the verified results (notebooks 06–08). The p-tau fill-in blanks have been **completed**
-> following the CSF p-tau181 correction (Methods §3.9); the core findings are unchanged.
+## 1. TITLE PAGE  *(unnumbered)*
+
+<div align="center">
+
+**Predicting Alzheimer's Disease Progression with Machine Learning: Early, Leakage-Free Prediction of Diagnosis and Conversion from Multimodal ADNI Data**
+
+By
+
+**Warda Saeed**
+
+Thesis Project
+Submitted in partial fulfillment of the
+Requirements for the degree of
+
+**MASTER OF SCIENCE IN DATA SCIENCE**
+*(confirm exact degree wording with your program — the format guide reads "Predictive Analytics")*
+
+[Month, Year of degree conferral — e.g., August 2026]
+
+[First Reader Name], First Reader
+[Second Reader Name], Second Reader
+
+</div>
+
+> *Title check (per guide): title case applied (articles/conjunctions/prepositions — "with, of, from,
+> and" — lowercased; first word of title and subtitle capitalized); no special characters; "ADNI" kept
+> as a standard field acronym. If your reviewers prefer the acronym spelled out, replace "ADNI" with
+> "the Alzheimer's Disease Neuroimaging Initiative."*
 
 ---
 
-## Abstract
+## 2. ABSTRACT  *(page 2; ≤ 350 words, one page)*
+
+<div align="center">
+
+**ABSTRACT**
+
+Predicting Alzheimer's Disease Progression with Machine Learning: Early, Leakage-Free Prediction of Diagnosis and Conversion from Multimodal ADNI Data
+
+Warda Saeed
+
+</div>
 
 **Background.** Alzheimer's disease (AD) is a progressive neurodegenerative disorder in which the window
 for effective intervention opens well before dementia, during the cognitively normal (CN) and mild
@@ -70,34 +93,96 @@ Alzheimer's risk stratification, and they show that correctly measured CSF phosp
 contributes modest, non-redundant signal beyond total tau.
 
 **Keywords:** Alzheimer's disease; mild cognitive impairment; ADNI; machine learning; conversion
-prediction; survival analysis; data leakage; biomarkers.
 
 ---
 
-### Note
+## 3. TABLE OF CONTENTS
 
-p-tau blanks completed following the CSF p-tau181 correction (Methods §3.9): 33 predictors; corrected
-PTAU is a mid-tier predictor (rank ≈ 11–12/33) and does not change the conversion results.
-
-*Word count (excluding keywords): ~330; trim to your program's limit (commonly 250–300) if needed — the
-Background and Methods paragraphs compress most easily.*
-
-
+| Section | Page |
+|---|---|
+| Abstract | — |
+| List of Tables | — |
+| List of Figures | — |
+| **Chapter 1 — Introduction** | — |
+| 1.1 Overview of Alzheimer's Disease | — |
+| 1.2 Statement of the Problem | — |
+| 1.3 Research Objectives | — |
+| 1.4 Hypotheses | — |
+| 1.5 Justification and Significance | — |
+| **Chapter 2 — Literature Review** | — |
+| 2.1 Genetic Factors in AD | — |
+| 2.2 Neuropathology | — |
+| 2.3 Brain Atrophy and Structural Change | — |
+| 2.4 Diagnostic Methods and Biomarkers | — |
+| 2.5 Benefits of Early Diagnosis | — |
+| 2.6 The Role of ADNI | — |
+| 2.7 Machine Learning in AD Prediction, and the Methodological Gap | — |
+| **Chapter 3 — Methods** | — |
+| 3.1 Study Design and Data Source | — |
+| 3.2 Baseline Data Preparation | — |
+| 3.3 Missing-Data Treatment and Encoding | — |
+| 3.4 Cohort Construction and Unit of Analysis | — |
+| 3.5 Feature Set | — |
+| 3.6 Classification Models | — |
+| 3.7 Predictor Identification | — |
+| 3.8 Survival Analysis (Time to Conversion) | — |
+| 3.9 Clinical Risk Score | — |
+| 3.10 Cognitive-Decline Trajectories | — |
+| 3.11 Software and Reproducibility | — |
+| 3.12 Data-Integrity Correction: CSF p-tau (PTAU) | — |
+| **Chapter 4 — Results** | — |
+| 4.1 Participant Flow and Cohort Construction | — |
+| 4.2 Impact of Evaluation Design (Data Leakage) | — |
+| 4.3 Conversion Labeling and Sensitivity Analysis | — |
+| 4.4 Predictive Performance Across Cohorts and Algorithms | — |
+| 4.5 Predictors of Conversion and Their Stage Dependence | — |
+| 4.6 Time to Conversion (Survival Analysis) | — |
+| 4.7 A Parsimonious Clinical Risk Score | — |
+| 4.8 Cognitive Decline Trajectories | — |
+| **Chapter 5 — Discussion** | — |
+| 5.1 Summary of Principal Findings | — |
+| 5.2 Stage-Dependent Predictors | — |
+| 5.3 Model Performance and the Study Hypothesis | — |
+| 5.4 Timing of Conversion | — |
+| 5.5 A Methodological Contribution: Evaluation Rigor and Label Quality | — |
+| 5.6 Clinical Implications | — |
+| 5.7 Limitations | — |
+| 5.8 Future Directions | — |
+| **Chapter 6 — Conclusion** | — |
+| References | — |
+| Appendices *(optional)* | — |
 
 ---
 
+## 4. LIST OF TABLES
 
-## Table of Contents
+| Table | Title | Page |
+|---|---|---|
+| 4.1 | Converters by outcome definition | — |
+| 4.2 | ROC-AUC by model and cohort (5-fold CV, mean ± SD) | — |
+| 4.3 | Top early predictors by cohort (permutation-importance rank) | — |
+| 4.4 | Kaplan–Meier: probability of remaining dementia-free | — |
 
-- Abstract
-- Chapter 1 — Introduction
-- Chapter 2 — Literature Review
-- Chapter 3 — Methods
-- Chapter 4 — Results
-- Chapter 5 — Discussion
-- Chapter 6 — Conclusion
-- References
-- Author Checklist (open items)
+---
+
+## 5. LIST OF FIGURES
+
+| Figure | Title | Page |
+|---|---|---|
+| 1 | Receiver operating characteristic curves by cohort | — |
+| 2 | Kaplan–Meier estimates of remaining dementia-free, MCI cohort, by APOE4 status | — |
+| 3 | Cox proportional-hazards model of time to MCI → Dementia conversion | — |
+| 4 | Stage-dependent early predictors (permutation importance) | — |
+
+---
+
+### Author to complete
+- [ ] First Reader (Thesis Advisor) name; Second Reader (Final Reader) name
+- [ ] Degree-conferral month/year on title page and the exact degree name (Data Science vs. Predictive Analytics)
+- [ ] Paste the abstract body under the ABSTRACT header (from `THESIS_Abstract_DRAFT.md`)
+- [ ] Page numbers in TOC / List of Tables / List of Figures (auto-generate in Word after layout)
+
+
 
 ---
 
@@ -221,8 +306,8 @@ FDG-PET for glucose metabolism, and amyloid-PET (e.g., AV45) for plaque burden. 
 reduced amyloid-beta (ABETA) and elevated total and phosphorylated tau (TAU, p-tau), which change early
 in the disease course. **Neuropsychological testing** — instruments such as ADAS-Cog, MMSE, MoCA, RAVLT,
 the FAQ, and CDR-SB that quantify cognitive and functional status. The present study draws on all three
-streams. _(Note: phosphorylated tau was excluded from the analyses reported here owing to a data
-preprocessing error and is slated for restoration; see Methods §3.9.)_
+streams. _(Note: CSF phosphorylated tau was initially corrupted by a preprocessing error and was
+corrected against the ADNI source before analysis; see Methods §3.12.)_
 
 ## 2.5 Benefits of early diagnosis
 
@@ -283,8 +368,8 @@ results — complementing the substantive goal of identifying stage-specific ear
 > making it a near-duplicate of `TAU` (Pearson r ≈ 1.00) on the wrong (~10×) scale. It was **corrected**
 > by reconstructing observed values from the ADNI source on p-tau181's true 8–120 pg/mL scale
 > (`UPENNBIOMK_ROCHE_ELECSYS`, ADNIMERGE2) and re-imputing gaps within range; final models use the
-> corrected **33-feature** set. A sensitivity analysis (Section 3.9) confirms the correction leaves the
-> conversion AUCs unchanged; corrected PTAU enters as a mid-tier predictor. See Section 3.9.
+> corrected **33-feature** set. A sensitivity analysis (Section 3.12) confirms the correction leaves the
+> conversion AUCs unchanged; corrected PTAU enters as a mid-tier predictor. See Section 3.12.
 
 ---
 
@@ -309,9 +394,9 @@ chronologically within participant.
 Diagnostic labels were harmonized so that baseline and follow-up categories were comparable: "AD" was
 recoded to "Dementia," and "LMCI"/"EMCI" were collapsed to "MCI." Censored biomarker values reported
 as thresholds were converted to numeric values (ABETA: ">1700"→1700, "<200"→200; TAU: "<80"→80,
-">1300"→1300; PTAU: correctly "<8"→8, ">120"→120 after the correction described in Section 3.9). *(An
+">1300"→1300; PTAU: correctly "<8"→8, ">120"→120 after the correction described in Section 3.12). *(An
 earlier version of the pipeline had applied total-tau limits to PTAU and imputed it on the wrong scale;
-this was corrected before the analyses reported here — see Section 3.9.)*
+this was corrected before the analyses reported here — see Section 3.12.)*
 
 ## 3.3 Missing-data treatment and encoding
 
@@ -364,7 +449,7 @@ Thirty-three baseline predictors were used: AGE, PTEDUCAT, PTGENDER, APOE4, ABET
 Entorhinal, FAQ, FDG, Fusiform, Hippocampus, ICV, LDELTOTAL, MidTemp, MMSE, MOCA, mPACCdigit,
 mPACCtrailsB, PTAU, RAVLT (forgetting, immediate, learning, percent-forgetting), TAU, TRABSCOR,
 Ventricles, WholeBrain, and the four marital-status indicators (PTAU included after the correction in
-Section 3.9). Identifiers, timing variables, current and future diagnosis labels, and the 27
+Section 3.12). Identifiers, timing variables, current and future diagnosis labels, and the 27
 missingness indicators were excluded from the predictor set.
 
 ## 3.6 Classification models
@@ -438,7 +523,7 @@ matching results summary.
 
 ---
 
-### Section 3.9 — PTAU data-integrity correction (resolved)
+## 3.12 Data-integrity correction: CSF p-tau (PTAU)
 The CSF phosphorylated-tau (PTAU, p-tau181) field had been corrupted in earlier processing in two ways:
 total-tau detection limits (`<80/>1300` rather than p-tau181's `<8/>120`) were applied, and its ~76%
 missing values were imputed on the total-tau scale — leaving PTAU a near-duplicate of TAU (r ≈ 1.00,
@@ -583,7 +668,7 @@ cognition (MOCA, MMSE) — consistent with early medial-temporal atrophy. Closer
 the strongest predictors were measures of **daily function (FAQ), brain metabolism (FDG), and amyloid
 burden (AV45, ABETA)**. The corrected CSF phosphorylated-tau measure (PTAU) entered the models as a
 **mid-tier predictor** (Random Forest importance rank ≈ 11–12 of 33; ranked 9th in the pooled cohort),
-consistent with its known but partly redundant relationship to total tau (Methods §3.9).
+consistent with its known but partly redundant relationship to total tau (Methods §3.12).
 
 Two complementary selection methods were applied to the pooled cohort: SelectKBest (ANOVA F-test) chose
 mPACCtrailsB, FAQ, ADAS13, mPACCdigit, LDELTOTAL, CDRSB, AV45, MOCA, RAVLT-immediate, and FDG; RFE
@@ -650,7 +735,7 @@ disease progression.
 # Chapter 5 — Discussion (Rewrite Draft)
 
 > Interpretive chapter grounded in the verified results (notebooks 06–08, figures). Conclusions here
-> do not depend on the PTAU correction (now completed, Methods §3.9); the former p-tau markers flag the
+> do not depend on the PTAU correction (now completed, Methods §3.12); the former p-tau markers flag the
 > few sentences to revisit once real phosphorylated-tau is re-introduced.
 
 ---
@@ -679,7 +764,7 @@ which pathological and functional processes are more advanced and more strongly 
 dementia. This shift — from *structure/memory* early to *function/metabolism/pathology* later — is the
 central scientific contribution of stratifying the cohorts rather than pooling them blindly, and it
 aligns with contemporary staging models of the AD continuum. Once the corrupted CSF p-tau181 measure
-was corrected (Methods §3.9), it entered the models as a mid-tier predictor rather than a leading one —
+was corrected (Methods §3.12), it entered the models as a mid-tier predictor rather than a leading one —
 consistent with its strong correlation with, and only partly non-redundant signal beyond, total tau.
 
 ## 5.3 Model performance and the study hypothesis
@@ -741,7 +826,7 @@ may offer a practical, low-cost first-pass stratification of MCI patients by con
    excluded as error.
 4. **Data-integrity correction (PTAU).** A preprocessing error had placed CSF p-tau181 on the wrong
    scale, making it a near-duplicate of total tau. This was identified and corrected against the ADNI
-   source (Methods §3.9); a sensitivity analysis confirmed the conversion results were unchanged, and
+   source (Methods §3.12); a sensitivity analysis confirmed the conversion results were unchanged, and
    corrected PTAU entered as a mid-tier predictor. This is reported as a resolved data-integrity check
    rather than a limitation, though it underscores the importance of biomarker-scale validation.
 5. **Single-cohort, internal validation only.** All estimates derive from ADNI with cross-validation;
@@ -770,7 +855,7 @@ may offer a practical, low-cost first-pass stratification of MCI patients by con
 
 ### Notes for you (delete before submission)
 - Every claim traces to notebooks 06–08 and the figures; no numbers are asserted beyond what was computed.
-- The p-tau markers have been resolved following the CSF p-tau181 correction (Methods §3.9) — none
+- The p-tau markers have been resolved following the CSF p-tau181 correction (Methods §3.12) — none
   change the conclusions, they only potentially strengthen the tau-pathology story.
 
 
@@ -781,59 +866,47 @@ may offer a practical, low-cost first-pass stratification of MCI patients by con
 # Chapter 6 — Conclusion
 
 This thesis set out to identify early predictors of Alzheimer's disease and of conversion to dementia
-from multimodal ADNI data, and to do so with an evaluation framework rigorous enough to trust. Three
-contributions follow from the work.
-
-First, **baseline multimodal measures predict progression to dementia with clinically useful accuracy**
-in the impaired-spectrum cohorts (pooled CN+MCI→AD ROC-AUC 0.88; MCI→Dementia 0.83), while prediction
-from full cognitive normality remains genuinely hard (≈ 0.65–0.69) — an honest reflection of a slow,
-low-incidence process rather than a modeling failure.
-
-Second, **the most informative predictors change with disease stage** — from structural and memory
-measures at the cognitively-normal stage to functional, metabolic, and amyloid measures nearer to
-dementia. This stage-dependence, visible only because the cohorts were modeled separately, is the
-study's central substantive finding, and it is reinforced by convergent survival analysis of
-conversion timing.
-
-Third, and most transferable, the work demonstrates that **methodology determines credibility**:
-participant-level evaluation and a confirmed-conversion outcome are prerequisites for believable
-estimates. A naïve visit-level analysis produced an early-detection result of ~82% that collapsed to
-chance under a correct participant-grouped split. A parallel data-integrity check — the correction of a
-mis-scaled CSF p-tau181 field — similarly showed the value of validating inputs, and confirmed the main
-findings were robust to it.
-
-Taken together, the findings support stage-aware, interpretable models — logistic regression proved as
-accurate as ensembles — for early Alzheimer's risk stratification, and they argue for careful,
-leakage-free validation as a standard of practice. The limitations noted in Chapter 5 (enrollment bias,
-an under-powered CN cohort, and single-cohort validation) define a clear agenda for the next iteration.
+from multimodal ADNI data, under an evaluation framework rigorous enough to trust. Three contributions
+follow. First, baseline multimodal measures predict progression to dementia with clinically useful
+accuracy in the impaired-spectrum cohorts (pooled CN+MCI→AD ROC-AUC 0.88; MCI→Dementia 0.83), while
+prediction from full cognitive normality remains genuinely hard (≈ 0.65–0.69). Second, the most
+informative predictors change with disease stage — from structural and memory measures at the
+cognitively-normal stage to functional, metabolic, and amyloid measures nearer dementia — a
+stage-dependence visible only because the cohorts were modeled separately. Third, and most transferable,
+the work shows that methodology determines credibility: participant-level evaluation and a
+confirmed-conversion outcome are prerequisites for believable estimates, as a naïve visit-level analysis
+produced an early-detection result of ~82% that collapsed to chance under a correct participant-grouped
+split. Together the findings support stage-aware, interpretable models — logistic regression proved as
+accurate as ensembles — and argue for leakage-free validation as a standard of practice. The limitations
+in Chapter 5 (enrollment bias, an under-powered CN cohort, single-cohort validation) define the agenda
+for the next iteration.
 
 ---
 
 
 # References
 
-_(In-text citations verified against this draft. Complete the entries marked in the Author Checklist
-before submission.)_
+_(APA/Chicago style to be finalized; complete the entries flagged in the Author Checklist. At least
+seven scholarly sources with two published within the last ten years are required per the format guide.)_
 
-1. Grabher, B. J. (2018). Effects of Alzheimer Disease on Patients and Their Family.
-   *Journal of Nuclear Medicine Technology*, 46(4), 335–340.
-2. Porsteinsson, A. P., Isaacson, R. S., Knox, S., et al. (2021). Diagnosis of Early Alzheimer's
-   Disease: Clinical Practice in 2021. *Journal of Prevention of Alzheimer's Disease*, 8, 371–386.
-3. Venugopalan, J., Tong, L., Hassanzadeh, H. R., et al. (2021). Multimodal deep learning models for
-   early detection of Alzheimer's disease stage. *Scientific Reports*, 11, 3254.
-4. World Health Organization (2021). *Dementia Fact Sheet.*
+Grabher, B. J. (2018). Effects of Alzheimer disease on patients and their family. *Journal of Nuclear
+Medicine Technology, 46*(4), 335–340.
 
-_Additional references required — see Author Checklist._
+Porsteinsson, A. P., Isaacson, R. S., Knox, S., et al. (2021). Diagnosis of early Alzheimer's disease:
+Clinical practice in 2021. *Journal of Prevention of Alzheimer's Disease, 8*, 371–386.
 
----
+Venugopalan, J., Tong, L., Hassanzadeh, H. R., et al. (2021). Multimodal deep learning models for early
+detection of Alzheimer's disease stage. *Scientific Reports, 11*, 3254.
 
+World Health Organization. (2021). *Dementia fact sheet.*
 
 ---
+
 
 # Author Checklist (open items)
 
 ## A. p-tau — COMPLETE
-The CSF p-tau181 correction is done (Methods §3.9); 33 features; p-tau is a mid-tier predictor. No open p-tau blanks remain.
+The CSF p-tau181 correction is done (Methods §3.12); 33 features; p-tau is a mid-tier predictor. No open p-tau blanks remain.
 
 ## B. Citations to add (no references were fabricated)
 - **Intro/LitReview** (line 6): > to §2.7. `[CITATION NEEDED]` marks claims that require a supporting reference — no references were
