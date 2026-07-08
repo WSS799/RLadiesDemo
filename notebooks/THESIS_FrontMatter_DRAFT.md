@@ -126,6 +126,9 @@ Results/Conclusions paragraphs, ~330 words, no tables or formulas per the guide.
 | 4.3 | ROC-AUC by model and cohort (5-fold CV, mean ± SD) | — |
 | 4.4 | Top early predictors by cohort (permutation-importance rank) | — |
 | 4.5 | Kaplan–Meier: probability of remaining dementia-free | — |
+| 4.6 | Detailed performance by cohort (AUC 95% CI, sensitivity, specificity, PPV, NPV, F1, Brier) | — |
+| 4.7 | Pooled → AD ROC-AUC by subgroup | — |
+| 4.8 | Feature-group ablation | — |
 
 ---
 
@@ -142,8 +145,9 @@ Results/Conclusions paragraphs, ~330 words, no tables or formulas per the guide.
 | 2 | Kaplan–Meier estimates of remaining dementia-free, MCI cohort, by APOE4 status | — |
 | 3 | Cox proportional-hazards model of time to MCI → Dementia conversion | — |
 | 4 | Stage-dependent early predictors (permutation importance) | — |
+| 5 | Subgroup performance (Pooled → AD): fairness check | — |
 
-*Note: figures are labeled EDA-1…EDA-5 (exploratory) and 1…4 (results); renumber sequentially (1–9)
+*Note: figures are labeled EDA-1…EDA-5 (exploratory) and 1…5 (results); renumber sequentially (1–10)
 during final layout if your reviewers prefer a single series.*
 
 ---

@@ -76,7 +76,13 @@ routinely available measures — led by ADAS13, FAQ, hippocampal volume, and APO
 predictive signal available from the full multimodal panel. This is encouraging for real-world use,
 where full biomarker and imaging panels are often unavailable, and it dovetails with the finding that a
 linear model suffices. Prioritizing functional and memory assessment, together with APOE4 genotyping,
-may offer a practical, low-cost first-pass stratification of MCI patients by conversion risk.
+may offer a practical, low-cost first-pass stratification of MCI patients by conversion risk. The
+feature-group ablation (Section 4.11) reinforces this: cognitive and functional measures alone reached
+an AUC of 0.855 versus 0.88 for the full multimodal panel, and removing any single imaging or biomarker
+modality barely changed performance. Because these modalities are substantially inter-correlated, the
+more expensive and invasive assessments (PET, lumbar puncture) added little *incremental* discrimination
+here — an economically meaningful finding for resource-limited settings, though those modalities retain
+value for mechanism, staging, and confirmation.
 
 ## 5.7 Limitations
 
@@ -95,9 +101,14 @@ may offer a practical, low-cost first-pass stratification of MCI patients by con
    source (Methods §3.12); a sensitivity analysis confirmed the conversion results were unchanged, and
    corrected PTAU entered as a mid-tier predictor. This is reported as a resolved data-integrity check
    rather than a limitation, though it underscores the importance of biomarker-scale validation.
-5. **Single-cohort, internal validation only.** All estimates derive from ADNI with cross-validation;
+5. **Subgroup performance disparities.** Discrimination was equitable by sex but lower for
+   less-educated participants (AUC 0.83 vs 0.90), older participants (0.82 vs 0.91 at age ≥ 75), and
+   APOE4 carriers (0.84 vs 0.87; Section 4.10). These gaps likely reflect ADNI's education-skewed
+   enrollment and greater heterogeneity among older, higher-risk patients. They caution against uniform
+   deployment and motivate subgroup-aware calibration and validation before clinical use.
+6. **Single-cohort, internal validation only.** All estimates derive from ADNI with cross-validation;
    no external or independent-cohort validation was performed, limiting claims about generalizability.
-6. **Reversible transitions simplified.** Conversion was treated as effectively one-directional after
+7. **Reversible transitions simplified.** Conversion was treated as effectively one-directional after
    confirmation; a full multi-state model of reversible CN↔MCI transitions was not undertaken.
 
 ## 5.8 Future directions

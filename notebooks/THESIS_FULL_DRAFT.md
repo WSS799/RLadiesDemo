@@ -163,6 +163,9 @@ contributes modest, non-redundant signal beyond total tau.
 | 4.3 | ROC-AUC by model and cohort (5-fold CV, mean ± SD) | — |
 | 4.4 | Top early predictors by cohort (permutation-importance rank) | — |
 | 4.5 | Kaplan–Meier: probability of remaining dementia-free | — |
+| 4.6 | Detailed performance by cohort (AUC 95% CI, sensitivity, specificity, PPV, NPV, F1, Brier) | — |
+| 4.7 | Pooled → AD ROC-AUC by subgroup | — |
+| 4.8 | Feature-group ablation | — |
 
 ---
 
@@ -179,8 +182,9 @@ contributes modest, non-redundant signal beyond total tau.
 | 2 | Kaplan–Meier estimates of remaining dementia-free, MCI cohort, by APOE4 status | — |
 | 3 | Cox proportional-hazards model of time to MCI → Dementia conversion | — |
 | 4 | Stage-dependent early predictors (permutation importance) | — |
+| 5 | Subgroup performance (Pooled → AD): fairness check | — |
 
-*Note: figures are labeled EDA-1…EDA-5 (exploratory) and 1…4 (results); renumber sequentially (1–9)
+*Note: figures are labeled EDA-1…EDA-5 (exploratory) and 1…5 (results); renumber sequentially (1–10)
 during final layout if your reviewers prefer a single series.*
 
 ---
@@ -771,6 +775,74 @@ the CN group; CDRSB showed the same ordering. Absolute CN slopes should be inter
 as the CN group contains future converters, but the relative ordering is consistent with expected
 disease progression.
 
+## 4.9 Detailed classification performance and calibration
+
+Table 4.6 reports discrimination (ROC-AUC with bootstrap 95% confidence intervals from 1,000 resamples)
+alongside threshold-based operating characteristics at a 0.5 cut-point (sensitivity, specificity,
+positive and negative predictive value, F1) and probability calibration (Brier score) for each cohort.
+
+**Table 4.6 — Detailed performance by cohort (patient-level out-of-fold predictions).**
+
+| Cohort | ROC-AUC (95% CI) | Sens. | Spec. | PPV | NPV | F1 | Brier |
+|---|---|---|---|---|---|---|---|
+| CN → progression | 0.65 (0.58–0.72) | 24% | 89% | 28% | 88% | 0.26 | 0.147 |
+| MCI → Dementia | 0.82 (0.80–0.85) | 65% | 80% | 56% | 86% | 0.60 | 0.155 |
+| Pooled → AD | 0.88 (0.86–0.90) | 67% | 88% | 55% | 92% | 0.61 | 0.113 |
+
+The pooled and MCI models combined high specificity with high negative predictive value (NPV 86–92%):
+a low predicted risk reliably identified non-converters, which is clinically useful for ruling out
+imminent progression. Positive predictive value was more modest (55–56%), an expected consequence of the
+low conversion base rate. Brier scores of 0.11–0.16 indicate reasonable probability calibration. The CN
+model's low sensitivity at the default threshold (24%) reflects its limited statistical power; where
+early flagging is prioritized, a lower decision threshold would trade specificity for sensitivity.
+
+## 4.10 Subgroup and fairness analysis
+
+To assess generalizability across patient subgroups, pooled-model discrimination was recomputed within
+strata defined by sex, APOE4 status, education, and age (Table 4.7, Figure 5).
+
+**Table 4.7 — Pooled → AD ROC-AUC by subgroup.**
+
+| Subgroup | n | Events | ROC-AUC |
+|---|---|---|---|
+| Male | 737 | 142 | 0.87 |
+| Female | 601 | 102 | 0.88 |
+| APOE4-negative | 771 | 83 | 0.87 |
+| APOE4-positive | 567 | 161 | 0.84 |
+| Education < 16 yr | 447 | 92 | 0.83 |
+| Education ≥ 16 yr | 891 | 152 | 0.90 |
+| Age < 75 yr | 767 | 134 | 0.91 |
+| Age ≥ 75 yr | 571 | 110 | 0.82 |
+
+Performance was equivalent by sex (0.87 vs 0.88). Two disparities were notable: the model discriminated
+better for more-educated participants (0.90 vs 0.83) and for younger participants (0.91 vs 0.82), and
+modestly worse for APOE4 carriers (0.84 vs 0.87). These gaps — likely reflecting ADNI's education-skewed
+enrollment and the greater clinical heterogeneity of older and higher-genetic-risk patients — matter for
+equitable deployment and are discussed in Section 5.7.
+
+## 4.11 Feature-group contribution
+
+To quantify each data modality's contribution, the pooled model was refit using each feature group in
+isolation and, separately, with each group removed (Table 4.8).
+
+**Table 4.8 — Feature-group ablation (Pooled → AD; full-model AUC 0.88).**
+
+| Feature group | AUC (group alone) | AUC (group removed) | Δ if removed |
+|---|---|---|---|
+| Cognitive / functional | 0.855 | 0.838 | −0.042 |
+| MRI volumetric | 0.747 | 0.877 | −0.003 |
+| PET (AV45, FDG) | 0.791 | 0.879 | −0.001 |
+| CSF (ABETA, TAU, PTAU) | 0.755 | 0.877 | −0.003 |
+| Demographic / genetic | 0.659 | 0.876 | −0.004 |
+
+Cognitive and functional measures alone reached an AUC of 0.855 — close to the full multimodal model
+(0.88) — and their removal produced by far the largest degradation (−0.042). Removing any single
+imaging, biomarker, or demographic block barely changed performance (−0.001 to −0.004), because those
+modalities are substantially correlated with the cognitive measures and with one another (Figure EDA-4).
+This redundancy explains why the parsimonious clinical score (Section 4.7) approaches the full model, and
+it indicates that, for conversion prediction in this cohort, cognitive-functional assessment carries most
+of the actionable signal.
+
 ---
 
 ### Notes for you (delete before submission)
@@ -863,7 +935,13 @@ routinely available measures — led by ADAS13, FAQ, hippocampal volume, and APO
 predictive signal available from the full multimodal panel. This is encouraging for real-world use,
 where full biomarker and imaging panels are often unavailable, and it dovetails with the finding that a
 linear model suffices. Prioritizing functional and memory assessment, together with APOE4 genotyping,
-may offer a practical, low-cost first-pass stratification of MCI patients by conversion risk.
+may offer a practical, low-cost first-pass stratification of MCI patients by conversion risk. The
+feature-group ablation (Section 4.11) reinforces this: cognitive and functional measures alone reached
+an AUC of 0.855 versus 0.88 for the full multimodal panel, and removing any single imaging or biomarker
+modality barely changed performance. Because these modalities are substantially inter-correlated, the
+more expensive and invasive assessments (PET, lumbar puncture) added little *incremental* discrimination
+here — an economically meaningful finding for resource-limited settings, though those modalities retain
+value for mechanism, staging, and confirmation.
 
 ## 5.7 Limitations
 
@@ -882,9 +960,14 @@ may offer a practical, low-cost first-pass stratification of MCI patients by con
    source (Methods §3.12); a sensitivity analysis confirmed the conversion results were unchanged, and
    corrected PTAU entered as a mid-tier predictor. This is reported as a resolved data-integrity check
    rather than a limitation, though it underscores the importance of biomarker-scale validation.
-5. **Single-cohort, internal validation only.** All estimates derive from ADNI with cross-validation;
+5. **Subgroup performance disparities.** Discrimination was equitable by sex but lower for
+   less-educated participants (AUC 0.83 vs 0.90), older participants (0.82 vs 0.91 at age ≥ 75), and
+   APOE4 carriers (0.84 vs 0.87; Section 4.10). These gaps likely reflect ADNI's education-skewed
+   enrollment and greater heterogeneity among older, higher-risk patients. They caution against uniform
+   deployment and motivate subgroup-aware calibration and validation before clinical use.
+6. **Single-cohort, internal validation only.** All estimates derive from ADNI with cross-validation;
    no external or independent-cohort validation was performed, limiting claims about generalizability.
-6. **Reversible transitions simplified.** Conversion was treated as effectively one-directional after
+7. **Reversible transitions simplified.** Conversion was treated as effectively one-directional after
    confirmation; a full multi-state model of reversible CN↔MCI transitions was not undertaken.
 
 ## 5.8 Future directions
