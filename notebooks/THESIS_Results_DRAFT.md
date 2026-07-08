@@ -28,6 +28,49 @@ and the model predicted that participant's **future** diagnostic outcome. Conseq
 train/test partition separated *distinct individuals*, making it impossible for a given patient to
 appear in both training and testing folds.
 
+**Descriptive statistics and exploratory analysis.** Participants averaged 73.3 years of age
+(SD 7.2; range 54–91) and 16.1 years of education; 1,132 were male and 999 female; APOE4 allele counts
+were 1,197 (no ε4), 740 (one), and 194 (two) _[Fig EDA-1]_. Table 4.1 summarizes baseline
+characteristics by diagnostic group. Cognitive and functional measures worsened monotonically across the
+disease continuum — MMSE fell from 29.1 (CN) to 23.1 (dementia), MoCA from 25.7 to 16.7, and delayed
+verbal memory (LDELTOTAL) from 13.2 to 1.4, while ADAS-13 rose from 10.3 to 30.2, CDR-SB from 0.0 to
+4.4, and the FAQ from 0.2 to 13.2. Structural and molecular markers followed the expected trajectory:
+hippocampal volume and CSF amyloid-β declined, whereas total tau, phosphorylated tau, and amyloid-PET
+(AV45) rose with severity, and FDG metabolism fell _[Fig EDA-2, EDA-3]_. Mean APOE4 allele count also
+increased with severity (0.32 in CN, 0.59 in MCI, 0.84 in dementia). Notably, the corrected CSF
+p-tau181 increased monotonically across groups (21.4 → 27.9 → 36.5 pg/mL), consistent with its expected
+role as a marker of tau pathology and confirming that the data-integrity correction (Methods §3.12)
+restored a physiologically plausible measure.
+
+**Table 4.1 — Baseline characteristics by diagnostic group, mean (SD).**
+
+| Characteristic | CN (n = 792) | MCI (n = 969) | Dementia (n = 370) |
+|---|---|---|---|
+| Age, years | 73.0 (6.2) | 72.9 (7.6) | 74.9 (7.9) |
+| Education, years | 16.6 (2.6) | 15.9 (2.8) | 15.3 (3.0) |
+| Sex, male / female | 354 / 438 | 571 / 398 | 207 / 163 |
+| APOE4 alleles, mean | 0.32 | 0.59 | 0.84 |
+| MMSE | 29.1 (1.1) | 27.6 (1.8) | 23.1 (2.1) |
+| MoCA | 25.7 (2.4) | 22.5 (3.1) | 16.7 (3.8) |
+| ADAS-13 | 10.3 (4.5) | 16.8 (6.7) | 30.2 (8.1) |
+| CDR-SB | 0.0 (0.1) | 1.5 (0.9) | 4.4 (1.7) |
+| FAQ | 0.2 (0.9) | 3.2 (4.1) | 13.2 (7.0) |
+| Delayed memory (LDELTOTAL) | 13.2 (3.3) | 5.7 (3.4) | 1.4 (1.9) |
+| Hippocampal volume (mm³) | 7,407 (824) | 6,724 (1,104) | 5,725 (975) |
+| CSF Aβ (ABETA, pg/mL) | 1,248 (369) | 956 (397) | 674 (269) |
+| CSF total tau (pg/mL) | 237 (69) | 289 (117) | 368 (123) |
+| CSF p-tau181 (pg/mL) | 21.4 (7.0) | 27.9 (13.1) | 36.5 (13.3) |
+| Amyloid-PET (AV45 SUVR) | 1.1 (0.2) | 1.2 (0.2) | 1.4 (0.2) |
+| FDG-PET (SUVR) | 1.3 (0.1) | 1.2 (0.1) | 1.1 (0.1) |
+
+A correlation analysis of the 26 continuous baseline features _[Fig EDA-4]_ revealed coherent structure:
+the cognitive measures (MMSE, MoCA, mPACC composites, memory scores) were strongly inter-correlated; the
+MRI volumetric measures (hippocampus, entorhinal cortex, mid-temporal and fusiform gyri) formed a second
+cluster; and the two CSF tau species correlated strongly (r ≈ 0.99) while amyloid-β correlated negatively
+with tau and AV45 — the expected inverse amyloid–tau relationship in Alzheimer's disease. Corrected
+p-tau was correlated with, but not identical to, total tau, confirming that the correction restored a
+distinct biomarker rather than a duplicate column.
+
 ## 4.2 Impact of evaluation design (data leakage)
 
 Preliminary modeling that split the data at the visit level (i.e., treating each of a participant's
@@ -46,12 +89,12 @@ analysis. Diagnostic reversion (an improvement between visits) occurred in 123 p
 predominantly MCI → CN (108 occurrences) with some Dementia → MCI (28). Twenty-eight participants
 exhibited the CN → (MCI/Dementia) → CN pattern.
 
-Table 4.1 reports the number of converters under alternative definitions. Requiring a **confirmed**
+Table 4.2 reports the number of converters under alternative definitions. Requiring a **confirmed**
 transition (worse stage sustained ≥2 consecutive visits) reduced converter counts by roughly a
 quarter to a third relative to a naïve last-visit definition, removing single-visit fluctuations. The
 confirmed definition was pre-specified as the primary outcome for all subsequent models.
 
-**Table 4.1 — Converters by outcome definition**
+**Table 4.2 — Converters by outcome definition**
 
 | Definition | MCI→Dementia | CN→MCI/Dementia |
 |---|---|---|
@@ -73,10 +116,10 @@ baseline diagnosis deliberately excluded from the feature set so that the model 
 and cognitive predictors rather than the trivial CN-vs-MCI distinction.
 
 Six algorithms named in the study design were evaluated identically under 5-fold cross-validation
-with SMOTE applied inside training folds only. Discrimination (ROC-AUC) is reported in Table 4.2 and
+with SMOTE applied inside training folds only. Discrimination (ROC-AUC) is reported in Table 4.3 and
 the receiver operating characteristic curves in _[Fig 1 — fig1_roc_cohorts.png]_.
 
-**Table 4.2 — ROC-AUC by model and cohort (5-fold CV, mean ± SD)**
+**Table 4.3 — ROC-AUC by model and cohort (5-fold CV, mean ± SD)**
 
 | Model | CN → progression | MCI → Dementia | Pooled → AD |
 |---|---|---|---|
@@ -100,11 +143,12 @@ qualifies the study hypothesis (Section 5.3).
 ## 4.5 Predictors of conversion and their stage dependence
 
 Permutation importance (mean decrease in ROC-AUC on held-out folds) was used to rank predictors within
-each cohort _[Fig 4 — fig4_predictors.png]_. Two complementary feature-selection methods were also
-applied to the pooled cohort: univariate selection (ANOVA F-test, SelectKBest) and Recursive Feature
-Elimination with logistic regression.
+each cohort _[Fig 4 — fig4_predictors.png]_. This complements the exploratory finding that converters
+and stable participants already separate at baseline on several of these measures _[Fig EDA-5]_. Two
+complementary feature-selection methods were also applied to the pooled cohort: univariate selection
+(ANOVA F-test, SelectKBest) and Recursive Feature Elimination with logistic regression.
 
-**Table 4.3 — Top early predictors by cohort (permutation importance rank)**
+**Table 4.4 — Top early predictors by cohort (permutation importance rank)**
 
 | Rank | CN → progression | MCI → Dementia | Pooled → AD |
 |---|---|---|---|
@@ -141,7 +185,7 @@ For the MCI cohort (819 participants; 228 confirmed conversions; 591 right-censo
 time from baseline to first confirmed dementia was modeled. Kaplan–Meier estimates stratified by APOE4
 status _[Fig 2 — fig2_km_apoe4.png]_ showed markedly faster progression among APOE4 carriers:
 
-**Table 4.4 — Kaplan–Meier: probability of remaining dementia-free**
+**Table 4.5 — Kaplan–Meier: probability of remaining dementia-free**
 
 | Group | 2 years | 3 years | 5 years |
 |---|---|---|---|

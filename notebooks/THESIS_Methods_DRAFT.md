@@ -72,7 +72,7 @@ participant was labeled a converter only if a more severe stage was **sustained 
 consecutive visits**. Single-visit fluctuations were not counted as conversion. This "confirmed"
 definition was pre-specified as the primary outcome. Its effect was quantified in a sensitivity
 analysis comparing five definitions (last-visit, ever-reached, confirmed, and confirmed within 24 and
-36 months; Results Table 4.1).
+36 months; Results Table 4.2).
 
 **Analytic cohorts.**
 - **Cohort A — CN → progression:** baseline CN, outcome = confirmed progression to MCI or dementia

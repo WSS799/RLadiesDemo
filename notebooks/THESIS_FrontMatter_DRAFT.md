@@ -121,10 +121,11 @@ Results/Conclusions paragraphs, ~330 words, no tables or formulas per the guide.
 
 | Table | Title | Page |
 |---|---|---|
-| 4.1 | Converters by outcome definition | — |
-| 4.2 | ROC-AUC by model and cohort (5-fold CV, mean ± SD) | — |
-| 4.3 | Top early predictors by cohort (permutation-importance rank) | — |
-| 4.4 | Kaplan–Meier: probability of remaining dementia-free | — |
+| 4.1 | Baseline characteristics by diagnostic group | — |
+| 4.2 | Converters by outcome definition | — |
+| 4.3 | ROC-AUC by model and cohort (5-fold CV, mean ± SD) | — |
+| 4.4 | Top early predictors by cohort (permutation-importance rank) | — |
+| 4.5 | Kaplan–Meier: probability of remaining dementia-free | — |
 
 ---
 
@@ -132,10 +133,18 @@ Results/Conclusions paragraphs, ~330 words, no tables or formulas per the guide.
 
 | Figure | Title | Page |
 |---|---|---|
+| EDA-1 | Cohort overview: baseline demographics and follow-up | — |
+| EDA-2 | Distributions of key cognitive, MRI, and biomarker features | — |
+| EDA-3 | Key features by baseline diagnosis (CN / MCI / Dementia) | — |
+| EDA-4 | Correlation matrix of baseline features | — |
+| EDA-5 | Baseline feature distributions by eventual outcome (converter vs stable) | — |
 | 1 | Receiver operating characteristic curves by cohort | — |
 | 2 | Kaplan–Meier estimates of remaining dementia-free, MCI cohort, by APOE4 status | — |
 | 3 | Cox proportional-hazards model of time to MCI → Dementia conversion | — |
 | 4 | Stage-dependent early predictors (permutation importance) | — |
+
+*Note: figures are labeled EDA-1…EDA-5 (exploratory) and 1…4 (results); renumber sequentially (1–9)
+during final layout if your reviewers prefer a single series.*
 
 ---
 
