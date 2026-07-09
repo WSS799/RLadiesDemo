@@ -148,7 +148,7 @@ features.
 
 **Rationale for the modeling protocol.** Three design choices warrant emphasis. First, all resampling
 was performed at the **participant level**, so that no individual appeared in both training and test
-folds; this prevents the optimistic bias documented in Section 4.2. Second, **standardization and SMOTE
+folds; this prevents the optimistic bias documented in Section 4.3. Second, **standardization and SMOTE
 were fit only on training folds** and then applied to the held-out fold, so that no information from the
 test data influenced preprocessing (a common and subtle source of leakage). Third, class imbalance was
 addressed with SMOTE and balanced class weights **rather than by discarding majority cases**, preserving

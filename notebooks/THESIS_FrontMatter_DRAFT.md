@@ -95,13 +95,17 @@ Results/Conclusions paragraphs, ~330 words, no tables or formulas per the guide.
 | 3.12 Data-Integrity Correction: CSF p-tau (PTAU) | — |
 | **Chapter 4 — Results** | — |
 | 4.1 Participant Flow and Cohort Construction | — |
-| 4.2 Impact of Evaluation Design (Data Leakage) | — |
-| 4.3 Conversion Labeling and Sensitivity Analysis | — |
-| 4.4 Predictive Performance Across Cohorts and Algorithms | — |
-| 4.5 Predictors of Conversion and Their Stage Dependence | — |
-| 4.6 Time to Conversion (Survival Analysis) | — |
-| 4.7 A Parsimonious Clinical Risk Score | — |
-| 4.8 Cognitive Decline Trajectories | — |
+| 4.2 Exploratory Data Analysis | — |
+| 4.3 Impact of Evaluation Design (Data Leakage) | — |
+| 4.4 Conversion Labeling and Sensitivity Analysis | — |
+| 4.5 Predictive Performance Across Cohorts and Algorithms | — |
+| 4.6 Predictors of Conversion and Their Stage Dependence | — |
+| 4.7 Time to Conversion (Survival Analysis) | — |
+| 4.8 A Parsimonious Clinical Risk Score | — |
+| 4.9 Cognitive Decline Trajectories | — |
+| 4.10 Detailed Classification Performance and Calibration | — |
+| 4.11 Subgroup and Fairness Analysis | — |
+| 4.12 Feature-Group Contribution | — |
 | **Chapter 5 — Discussion** | — |
 | 5.1 Summary of Principal Findings | — |
 | 5.2 Stage-Dependent Predictors | — |

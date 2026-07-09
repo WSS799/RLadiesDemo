@@ -132,13 +132,17 @@ contributes modest, non-redundant signal beyond total tau.
 | 3.12 Data-Integrity Correction: CSF p-tau (PTAU) | — |
 | **Chapter 4 — Results** | — |
 | 4.1 Participant Flow and Cohort Construction | — |
-| 4.2 Impact of Evaluation Design (Data Leakage) | — |
-| 4.3 Conversion Labeling and Sensitivity Analysis | — |
-| 4.4 Predictive Performance Across Cohorts and Algorithms | — |
-| 4.5 Predictors of Conversion and Their Stage Dependence | — |
-| 4.6 Time to Conversion (Survival Analysis) | — |
-| 4.7 A Parsimonious Clinical Risk Score | — |
-| 4.8 Cognitive Decline Trajectories | — |
+| 4.2 Exploratory Data Analysis | — |
+| 4.3 Impact of Evaluation Design (Data Leakage) | — |
+| 4.4 Conversion Labeling and Sensitivity Analysis | — |
+| 4.5 Predictive Performance Across Cohorts and Algorithms | — |
+| 4.6 Predictors of Conversion and Their Stage Dependence | — |
+| 4.7 Time to Conversion (Survival Analysis) | — |
+| 4.8 A Parsimonious Clinical Risk Score | — |
+| 4.9 Cognitive Decline Trajectories | — |
+| 4.10 Detailed Classification Performance and Calibration | — |
+| 4.11 Subgroup and Fairness Analysis | — |
+| 4.12 Feature-Group Contribution | — |
 | **Chapter 5 — Discussion** | — |
 | 5.1 Summary of Principal Findings | — |
 | 5.2 Stage-Dependent Predictors | — |
@@ -625,7 +629,7 @@ two visits.
 Because the Alzheimer's Disease Neuroimaging Initiative preferentially enrolls participants who
 already show cognitive concern, the baseline diagnostic distribution was weighted toward impairment:
 792 cognitively normal (CN), 969 mild cognitive impairment (MCI), and 370 dementia at baseline. This
-enrollment pattern is discussed as a limitation (Section 5.5), as it inflates the apparent prevalence
+enrollment pattern is discussed as a limitation (Section 5.7), as it inflates the apparent prevalence
 of conversion relative to a community-based sample.
 
 To respect the longitudinal structure of the data, all predictive models were built at the **patient
@@ -634,19 +638,13 @@ and the model predicted that participant's **future** diagnostic outcome. Conseq
 train/test partition separated *distinct individuals*, making it impossible for a given patient to
 appear in both training and testing folds.
 
-**Descriptive statistics and exploratory analysis.** Participants averaged 73.3 years of age
-(SD 7.2; range 54–91) and 16.1 years of education; 1,132 were male and 999 female; APOE4 allele counts
-were 1,197 (no ε4), 740 (one), and 194 (two) _[Fig EDA-1]_. Table 4.1 summarizes baseline
-characteristics by diagnostic group. Cognitive and functional measures worsened monotonically across the
-disease continuum — MMSE fell from 29.1 (CN) to 23.1 (dementia), MoCA from 25.7 to 16.7, and delayed
-verbal memory (LDELTOTAL) from 13.2 to 1.4, while ADAS-13 rose from 10.3 to 30.2, CDR-SB from 0.0 to
-4.4, and the FAQ from 0.2 to 13.2. Structural and molecular markers followed the expected trajectory:
-hippocampal volume and CSF amyloid-β declined, whereas total tau, phosphorylated tau, and amyloid-PET
-(AV45) rose with severity, and FDG metabolism fell _[Fig EDA-2, EDA-3]_. Mean APOE4 allele count also
-increased with severity (0.32 in CN, 0.59 in MCI, 0.84 in dementia). Notably, the corrected CSF
-p-tau181 increased monotonically across groups (21.4 → 27.9 → 36.5 pg/mL), consistent with its expected
-role as a marker of tau pathology and confirming that the data-integrity correction (Methods §3.12)
-restored a physiologically plausible measure.
+Table 4.1 summarizes baseline characteristics by diagnostic group. All cognitive, functional,
+structural, and molecular markers worsened monotonically across the CN → MCI → Dementia continuum;
+in particular, the corrected CSF p-tau181 increased across groups (21.4 → 27.9 → 36.5 pg/mL),
+consistent with its role as a marker of tau pathology and confirming that the data-integrity
+correction (Methods §3.12) restored a physiologically plausible measure. The distributions underlying
+these summary values, the correlation structure among features, and the baseline separation between
+eventual converters and non-converters are examined in the exploratory analysis (Section 4.2).
 
 **Table 4.1 — Baseline characteristics by diagnostic group, mean (SD).**
 
@@ -669,15 +667,93 @@ restored a physiologically plausible measure.
 | Amyloid-PET (AV45 SUVR) | 1.1 (0.2) | 1.2 (0.2) | 1.4 (0.2) |
 | FDG-PET (SUVR) | 1.3 (0.1) | 1.2 (0.1) | 1.1 (0.1) |
 
-A correlation analysis of the 26 continuous baseline features _[Fig EDA-4]_ revealed coherent structure:
-the cognitive measures (MMSE, MoCA, mPACC composites, memory scores) were strongly inter-correlated; the
-MRI volumetric measures (hippocampus, entorhinal cortex, mid-temporal and fusiform gyri) formed a second
-cluster; and the two CSF tau species correlated strongly (r ≈ 0.99) while amyloid-β correlated negatively
-with tau and AV45 — the expected inverse amyloid–tau relationship in Alzheimer's disease. Corrected
-p-tau was correlated with, but not identical to, total tau, confirming that the correction restored a
-distinct biomarker rather than a duplicate column.
+## 4.2 Exploratory data analysis
 
-## 4.2 Impact of evaluation design (data leakage)
+Before modeling, the baseline cohort (each participant's first visit, N = 2,131) was characterized
+descriptively to (a) document the sample and its representativeness, (b) verify data quality and the
+plausibility of feature distributions, and (c) establish, in an unadjusted view, which measures
+separate diagnostic groups and eventual converters. These analyses motivate the feature set and the
+stratified design used in the modeling sections and are reported as five figures. Because most features
+are skewed (Figure EDA-2), values below are given as **median [interquartile range]** and group
+differences use the Mann–Whitney *U* test; all values were computed from `data/pre_modelling_data.csv`
+and reflect the corrected CSF p-tau181 (Methods §3.12).
+
+**Figure EDA-1 — Cohort composition and follow-up.** Six panels summarize the baseline sample:
+distribution of baseline diagnosis, age, education, sex, *APOE* ε4 allele count, and number of
+longitudinal visits per participant. The cohort is weighted toward the impaired end of the spectrum:
+969 participants (45.5%) were MCI at baseline, 792 (37.2%) CN, and 370 (17.4%) dementia. Participants
+were older adults (median age 73.4 years, IQR 68.3–78.4) and highly educated (median 16 years, IQR
+14–18), with a slight male majority (1,132 men, 999 women). *APOE* ε4 showed the expected dose gradient
+(1,197 non-carriers, 740 with one allele, 194 with two). Follow-up was right-skewed: most participants
+contributed a few visits, with a long tail up to ~15. The over-representation of MCI is a design
+feature of ADNI, a convenience cohort that preferentially enrolls individuals with existing cognitive
+concern; this, and the high educational attainment, limit generalization to the general population and
+are carried forward as limitations (Section 5.7). The visible ε4 dose gradient is a first internal
+validity check — a well-established risk factor is distributed as the literature predicts.
+
+**Figure EDA-2 — Univariate distributions of the modeling features.** Histograms of sixteen key
+cognitive, MRI-volumetric, and fluid/PET biomarker features reveal three distributional patterns, each
+with a modeling consequence. (i) *Ceiling and floor effects*: MMSE piles up at its maximum of 30 (a
+well-known ceiling effect in a cohort with many unimpaired participants), while FAQ and CDRSB floor
+near zero. (ii) *Right-skew in the fluid biomarkers*: total tau and, after correction, phosphorylated
+tau (median ~24 pg/mL on the correct 8–120 pg/mL scale) are right-skewed — confirming p-tau is no
+longer a rescaled duplicate of total tau (Methods §3.12). (iii) *Bimodality in amyloid measures*: both
+CSF Aβ42 and amyloid-PET (AV45) show two modes, consistent with the biological split between
+amyloid-negative and amyloid-positive individuals; the ABETA spike at the upper bound reflects assay
+truncation at its ceiling. MRI volumes and FDG are approximately symmetric. These shapes justify
+reporting medians with IQRs for descriptive summaries and standardizing all features before any
+distance- or gradient-based model (KNN, SVM, MLP, logistic regression).
+
+**Figure EDA-3 — Feature separation by baseline diagnosis.** Box plots of nine core features across CN,
+MCI, and Dementia give an unadjusted view of how strongly each measure tracks disease stage. Every
+feature displays a monotone gradient, and the magnitude of separation orders the modalities. Global
+cognition and function separate most sharply (ADAS13 median 10.0 [7–13] → 16.7 [12–21] → 29.7 [24–35];
+CDRSB 0.0 → 1.5 → 4.5; FAQ 0.0 → 1.0 → 13.0); memory shows the same ordering (LDELTOTAL 13 → 6 → 0;
+RAVLT-immediate 45 → 33 → 23). Structural and metabolic imaging separate more modestly but consistently
+(hippocampus 7,434 → 6,706 → 5,614 mm³; FDG 1.3 → 1.2 → 1.1). Molecular pathology tracks stage in the
+expected directions (CSF Aβ42 falls 1,310 → 854 → 630 pg/mL; corrected p-tau rises 20.2 → 25.2 → 35.1
+pg/mL), and *APOE* ε4 carriage climbs in parallel (29% → 48% → 64%). This uniform, biologically
+coherent staging confirms the features carry genuine, correctly oriented disease signal — a data-quality
+gate before modeling — and previews a central finding: the *degree* of separation is stage-dependent,
+which motivates modeling the cohorts separately rather than pooling them blindly (Methods §3.4; Section
+4.6). Box-plot separation by *current* diagnosis, however, is not the same as *predictive* value for
+*future* conversion, which is examined next.
+
+**Figure EDA-4 — Correlation structure of the feature set.** A Pearson correlation heat map of 26
+baseline features reveals coherent blocks. A *cognitive block* is strongly inter-correlated (MMSE–MOCA
+r = +0.76; ADAS13–MMSE r = −0.74; the composites mPACCdigit–mPACCtrailsB r = +0.98, near-duplicates by
+construction). A *medial-temporal structural block* groups hippocampus–entorhinal (r = +0.70) with
+midtemporal and fusiform volumes, and whole-brain tracks with ICV (r = +0.72). A *molecular block*
+links the amyloid measures inversely (ABETA–AV45 r = −0.73) and the tau measures tightly (TAU–PTAU
+r = +0.98). Cross-block, higher ADAS13 correlates with lower FDG metabolism (r = −0.65) and smaller
+hippocampal volume (r = −0.55); age is only weakly correlated with most features. This block structure
+explains two downstream results: the high within-block redundancy means a parsimonious model can
+recover most of the signal (the basis for the seven-variable risk score, Section 4.8, and the ablation
+in Section 4.12, where removing any single imaging or biomarker modality barely changes performance);
+and the near-perfect TAU–PTAU correlation is the pattern the earlier data corruption produced
+*artifactually* — its persistence at the corrected scale confirms the two tau species are genuinely
+co-regulated, not that the correction reintroduced the error (Methods §3.12). High collinearity also
+cautions against over-interpreting any single feature's coefficient within a correlated block.
+
+**Figure EDA-5 — Baseline features by eventual outcome (converter vs. stable).** Overlaid,
+density-normalized histograms of eight leading features for participants non-demented at baseline, split
+by whether they later met the confirmed conversion-to-dementia definition (Methods §3.4) versus remained
+stable. Among the 1,761 non-demented-at-baseline participants, future converters and stable participants
+show clearly offset — though substantially overlapping — baseline distributions, with every displayed
+feature differing at p < 10⁻³⁷ (Mann–Whitney *U*). Future converters started with worse function (FAQ
+median 4.0 vs 0.0), worse memory (LDELTOTAL 3.0 vs 10.0), worse global cognition (ADAS13 19.7 vs 12.0;
+MOCA 21.0 vs 24.9), lower FDG metabolism (1.2 vs 1.3), smaller hippocampi (6,180 vs 7,203 mm³), and a
+more Alzheimer's-like molecular profile (AV45 1.4 vs 1.1; CSF Aβ42 668 vs 1,168 pg/mL). Critically,
+however, the two distributions overlap heavily for every feature — no single baseline measure cleanly
+partitions converters from non-converters. This figure states visually both the promise and the
+difficulty of early prediction: the consistent, highly significant shifts confirm baseline multimodal
+information is genuinely predictive of *future* decline, but the pervasive overlap explains why
+discrimination is good rather than perfect in the impaired-spectrum cohorts and genuinely hard from full
+cognitive normality (Section 4.5). (This pooled non-demented view of 1,761 participants is the union of
+the CN and MCI cohorts analyzed separately in the modeling sections — 74 confirmed CN converters and 228
+confirmed MCI converters — under the same confirmed-conversion definition.)
+
+## 4.3 Impact of evaluation design (data leakage)
 
 Preliminary modeling that split the data at the visit level (i.e., treating each of a participant's
 ~4–5 visits as an independent record) produced optimistic accuracy estimates. For the early-detection
@@ -688,7 +764,7 @@ features and the same eventual-outcome label; a random visit-level split therefo
 to recognize individuals it had already seen rather than to generalize. All results reported below
 use patient-level partitioning to avoid this bias.
 
-## 4.3 Conversion labeling and sensitivity analysis
+## 4.4 Conversion labeling and sensitivity analysis
 
 Because diagnostic status fluctuates in ADNI, the definition of "converter" materially affects the
 analysis. Diagnostic reversion (an improvement between visits) occurred in 123 participants (5.8%),
@@ -712,9 +788,9 @@ confirmed definition was pre-specified as the primary outcome for all subsequent
 
 Short fixed-horizon definitions (24/36 months) were inappropriate for the CN cohort because CN→MCI
 conversion is slow (median time to confirmed conversion ≈ 4 years); the confirmed-any-time definition
-was therefore used, with time-to-event modeled explicitly via survival analysis (Section 4.6).
+was therefore used, with time-to-event modeled explicitly via survival analysis (Section 4.7).
 
-## 4.4 Predictive performance across cohorts and algorithms
+## 4.5 Predictive performance across cohorts and algorithms
 
 Three cohorts were modeled: (A) baseline **CN → progression** to MCI or dementia; (B) baseline
 **MCI → Dementia**; and (C) a **pooled** CN+MCI cohort predicting progression to dementia, with
@@ -746,13 +822,13 @@ indistinguishable, with the simple linear model matching the ensembles. This ind
 predictive signal in these features is largely linear and does not require nonlinear modeling, which
 qualifies the study hypothesis (Section 5.3).
 
-## 4.5 Predictors of conversion and their stage dependence
+## 4.6 Predictors of conversion and their stage dependence
 
 Permutation importance (mean decrease in ROC-AUC on held-out folds) was used to rank predictors within
 each cohort _[Fig 4 — fig4_predictors.png]_. This complements the exploratory finding that converters
-and stable participants already separate at baseline on several of these measures _[Fig EDA-5]_. Two
-complementary feature-selection methods were also applied to the pooled cohort: univariate selection
-(ANOVA F-test, SelectKBest) and Recursive Feature Elimination with logistic regression.
+and stable participants already separate at baseline on several of these measures (Section 4.2, Figure
+EDA-5). Two complementary feature-selection methods were also applied to the pooled cohort: univariate
+selection (ANOVA F-test, SelectKBest) and Recursive Feature Elimination with logistic regression.
 
 **Table 4.4 — Top early predictors by cohort (permutation importance rank)**
 
@@ -785,7 +861,7 @@ each tau species carries some non-redundant signal once PTAU is correctly scaled
 feature ("Never married") is almost certainly spurious and illustrates the value of requiring
 convergence across selection methods.
 
-## 4.6 Time to conversion (survival analysis)
+## 4.7 Time to conversion (survival analysis)
 
 For the MCI cohort (819 participants; 228 confirmed conversions; 591 right-censored at last visit),
 time from baseline to first confirmed dementia was modeled. Kaplan–Meier estimates stratified by APOE4
@@ -806,7 +882,7 @@ verbal memory (RAVLT-immediate 0.76; LDELTOTAL 0.79), and hippocampal volume (0.
 with slower conversion. These timing predictors align with the classification-based importance
 rankings, providing convergent evidence.
 
-## 4.7 A parsimonious clinical risk score
+## 4.8 A parsimonious clinical risk score
 
 To assess whether a small set of clinically accessible variables could approximate the full models, a
 logistic-regression risk score was built for MCI→Dementia from seven inputs (age, APOE4, MMSE, FAQ,
@@ -814,7 +890,7 @@ CDRSB, hippocampal volume, ADAS13). This parsimonious score achieved ROC-AUC ≈
 matching the full multivariable models — indicating that a handful of routine measures (led by ADAS13,
 FAQ, hippocampal volume, and APOE4) capture most of the available predictive signal.
 
-## 4.8 Cognitive decline trajectories
+## 4.9 Cognitive decline trajectories
 
 Linear mixed-effects models (random intercept and slope per participant) characterized the rate of
 cognitive decline by baseline group. All groups worsened over time, and the dementia group declined
@@ -823,7 +899,7 @@ the CN group; CDRSB showed the same ordering. Absolute CN slopes should be inter
 as the CN group contains future converters, but the relative ordering is consistent with expected
 disease progression.
 
-## 4.9 Detailed classification performance and calibration
+## 4.10 Detailed classification performance and calibration
 
 Table 4.6 reports discrimination (ROC-AUC with bootstrap 95% confidence intervals from 1,000 resamples)
 alongside threshold-based operating characteristics at a 0.5 cut-point (sensitivity, specificity,
@@ -844,7 +920,7 @@ low conversion base rate. Brier scores of 0.11–0.16 indicate reasonable probab
 model's low sensitivity at the default threshold (24%) reflects its limited statistical power; where
 early flagging is prioritized, a lower decision threshold would trade specificity for sensitivity.
 
-## 4.10 Subgroup and fairness analysis
+## 4.11 Subgroup and fairness analysis
 
 To assess generalizability across patient subgroups, pooled-model discrimination was recomputed within
 strata defined by sex, APOE4 status, education, and age (Table 4.7, Figure 5).
@@ -868,7 +944,7 @@ modestly worse for APOE4 carriers (0.84 vs 0.87). These gaps — likely reflecti
 enrollment and the greater clinical heterogeneity of older and higher-genetic-risk patients — matter for
 equitable deployment and are discussed in Section 5.7.
 
-## 4.11 Feature-group contribution
+## 4.12 Feature-group contribution
 
 To quantify each data modality's contribution, the pooled model was refit using each feature group in
 isolation and, separately, with each group removed (Table 4.8).
@@ -886,23 +962,22 @@ isolation and, separately, with each group removed (Table 4.8).
 Cognitive and functional measures alone reached an AUC of 0.855 — close to the full multimodal model
 (0.88) — and their removal produced by far the largest degradation (−0.042). Removing any single
 imaging, biomarker, or demographic block barely changed performance (−0.001 to −0.004), because those
-modalities are substantially correlated with the cognitive measures and with one another (Figure EDA-4).
-This redundancy explains why the parsimonious clinical score (Section 4.7) approaches the full model, and
-it indicates that, for conversion prediction in this cohort, cognitive-functional assessment carries most
-of the actionable signal.
+modalities are substantially correlated with the cognitive measures and with one another (Section 4.2,
+Figure EDA-4). This redundancy explains why the parsimonious clinical score (Section 4.8) approaches the
+full model, and it indicates that, for conversion prediction in this cohort, cognitive-functional
+assessment carries most of the actionable signal.
 
 ---
 
 ### Notes for you (delete before submission)
-- Every number here is traceable to notebooks 07/08 and the four figures in `notebooks/figures/`.
-- The 89% 3-class result from the original `04` notebook is intentionally **not** presented as an early-detection
-  result — if you want to keep it, present it in a short subsection as *concurrent diagnostic classification*
+- Every number here is traceable to notebooks 06–08 and the figures in `notebooks/figures/`.
+- **Section map after adding EDA:** §4.1 sample/flow + Table 4.1 → §4.2 exploratory data analysis
+  (Figures EDA-1–EDA-5) → §4.3 data leakage → §4.4 labeling → §4.5 performance → §4.6 predictors →
+  §4.7 survival → §4.8 risk score → §4.9 trajectories → §4.10 detailed metrics → §4.11 fairness →
+  §4.12 ablation. Tables keep their numbers (4.1–4.8); figures are EDA-1…EDA-5 and 1…5.
+- The 89% 3-class result from the original `04` notebook is intentionally **not** presented as an
+  early-detection result — if you want to keep it, present it as *concurrent diagnostic classification*
   and note its circularity (it uses CDRSB/FAQ, which partly define the diagnosis).
-- Figures are referenced as [Fig 1–4]; place the PNGs from `notebooks/figures/` at those points.
-
-
-
----
 
 
 # Chapter 5 — Discussion (Rewrite Draft)

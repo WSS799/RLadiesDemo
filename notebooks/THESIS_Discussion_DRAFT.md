@@ -77,7 +77,7 @@ predictive signal available from the full multimodal panel. This is encouraging 
 where full biomarker and imaging panels are often unavailable, and it dovetails with the finding that a
 linear model suffices. Prioritizing functional and memory assessment, together with APOE4 genotyping,
 may offer a practical, low-cost first-pass stratification of MCI patients by conversion risk. The
-feature-group ablation (Section 4.11) reinforces this: cognitive and functional measures alone reached
+feature-group ablation (Section 4.12) reinforces this: cognitive and functional measures alone reached
 an AUC of 0.855 versus 0.88 for the full multimodal panel, and removing any single imaging or biomarker
 modality barely changed performance. Because these modalities are substantially inter-correlated, the
 more expensive and invasive assessments (PET, lumbar puncture) added little *incremental* discrimination
@@ -103,7 +103,7 @@ value for mechanism, staging, and confirmation.
    rather than a limitation, though it underscores the importance of biomarker-scale validation.
 5. **Subgroup performance disparities.** Discrimination was equitable by sex but lower for
    less-educated participants (AUC 0.83 vs 0.90), older participants (0.82 vs 0.91 at age ≥ 75), and
-   APOE4 carriers (0.84 vs 0.87; Section 4.10). These gaps likely reflect ADNI's education-skewed
+   APOE4 carriers (0.84 vs 0.87; Section 4.11). These gaps likely reflect ADNI's education-skewed
    enrollment and greater heterogeneity among older, higher-risk patients. They caution against uniform
    deployment and motivate subgroup-aware calibration and validation before clinical use.
 6. **Single-cohort, internal validation only.** All estimates derive from ADNI with cross-validation;
