@@ -112,6 +112,49 @@ influencing training. Performance was estimated by **5-fold stratified cross-val
 (ROC-AUC) as the primary metric; balanced accuracy, sensitivity, and specificity were also computed.
 Results are reported as mean ± standard deviation across folds.
 
+**Evaluation metrics.** Discrimination was summarized by the **area under the ROC curve (ROC-AUC)** —
+the probability that a randomly chosen converter receives a higher predicted risk than a randomly chosen
+non-converter (0.5 = chance, 1.0 = perfect ranking). At a 0.5 probability threshold, four count-based
+measures were derived from the confusion matrix: **sensitivity** (recall; true positives ÷ all true
+converters), **specificity** (true negatives ÷ all true non-converters), **positive predictive value**
+(PPV; true positives ÷ all predicted converters), and **negative predictive value** (NPV; true negatives
+÷ all predicted non-converters). The **F1 score** (harmonic mean of PPV and sensitivity) summarized the
+balance between them, and **balanced accuracy** (mean of sensitivity and specificity) provided an
+imbalance-robust accuracy. Probability **calibration** — whether predicted risks match observed
+frequencies — was quantified with the **Brier score**, the mean squared difference between predicted
+probability and outcome (lower is better). ROC-AUC was the primary metric because it is
+threshold-independent and insensitive to class prevalence, both important given the low conversion base
+rates. For the survival models, the **concordance index (C-index)** — the survival analogue of ROC-AUC —
+and **hazard ratios** (the multiplicative change in instantaneous conversion risk per one-standard-
+deviation increase in a covariate; >1 faster, <1 slower) were reported.
+
+**Interval estimation.** Because held-out event counts were modest, 95% confidence intervals for ROC-AUC
+were obtained by **bootstrap resampling** of the out-of-fold predictions (1,000 resamples with
+replacement; 2.5th–97.5th percentiles). Cross-validation point estimates are reported as the mean across
+the five folds, with the standard deviation as a dispersion measure.
+
+**Subgroup (fairness) analysis.** To probe generalizability, pooled-model out-of-fold AUC was recomputed
+within strata defined by sex, APOE4 carriage (0 vs ≥ 1 allele), education (< 16 vs ≥ 16 years), and age
+(< 75 vs ≥ 75 years). Strata with fewer than 30 participants or a single outcome class were not
+evaluated. Comparable AUCs across strata indicate equitable performance; systematic gaps identify
+subgroups for which the model is less reliable.
+
+**Feature-group ablation.** To attribute predictive value to data modalities, the pooled model was refit
+(i) using each predefined feature group in isolation and (ii) with each group removed, comparing the
+resulting cross-validated AUC to the full-model AUC. Groups were cognitive/functional, MRI-volumetric,
+PET, CSF, and demographic/genetic. A large decrease when a group is removed indicates non-redundant
+signal; a negligible decrease indicates the group's information is largely captured by the remaining
+features.
+
+**Rationale for the modeling protocol.** Three design choices warrant emphasis. First, all resampling
+was performed at the **participant level**, so that no individual appeared in both training and test
+folds; this prevents the optimistic bias documented in Section 4.2. Second, **standardization and SMOTE
+were fit only on training folds** and then applied to the held-out fold, so that no information from the
+test data influenced preprocessing (a common and subtle source of leakage). Third, class imbalance was
+addressed with SMOTE and balanced class weights **rather than by discarding majority cases**, preserving
+all available data. Together these choices prioritize unbiased, reproducible estimates over headline
+accuracy.
+
 ## 3.7 Predictor identification
 
 Three complementary approaches identified important predictors:
@@ -153,14 +196,23 @@ their interaction (CN as reference), yielding group-specific annual rates of cha
 
 ## 3.11 Software and reproducibility
 
-Analyses were conducted in Python 3.11 using pandas, NumPy, scikit-learn, imbalanced-learn (SMOTE),
-XGBoost, statsmodels (Cox PH and mixed-effects), and Matplotlib. A fixed random seed (42) was used for
-all stochastic components (splitting, SMOTE, model initialization, permutation importance). All
-analyses are provided as executable notebooks (`06_Early_Conversion_Prediction`,
-`07_Stratified_AD_Predictors`, `08_Model_Comparison_FeatSel_RiskScore`) with embedded outputs and a
-matching results summary.
+Analyses were conducted in Python 3.11.15 (CPython) on a 64-bit Linux platform. The complete software
+stack, with the exact versions used for the final run, was: NumPy 2.4.6, pandas 3.0.3,
+scikit-learn 1.9.0 (classification models, cross-validation, permutation importance, feature
+selection, and metrics), imbalanced-learn 0.14.2 (SMOTE), XGBoost 3.2.0 (gradient-boosted trees),
+statsmodels 0.14.6 (Cox proportional-hazards regression and linear mixed-effects models),
+SciPy 1.17.1 (bootstrap resampling and statistical tests), and Matplotlib 3.11.0 (figures). Kaplan–Meier
+estimation and the confirmed-conversion labeling were implemented directly in NumPy/pandas rather than
+through an external survival package, so that the exact censoring and labeling logic remains inspectable
+in the notebook source.
 
-> _[Insert exact library versions from your final run environment before submission.]_
+A fixed random seed (42) was applied to every stochastic component — the participant-level
+cross-validation splitter, SMOTE, model initialization (Random Forest, XGBoost, and the multilayer
+perceptron), and permutation importance — so that all reported numbers are exactly reproducible from the
+notebooks. All analyses are provided as executable notebooks (`06_Early_Conversion_Prediction`,
+`07_Stratified_AD_Predictors`, `08_Model_Comparison_FeatSel_RiskScore`, and
+`09_Performance_Fairness_Ablation`) with embedded outputs and matching results summaries, run against a
+single, version-controlled analytic dataset (`data/pre_modelling_data.csv`).
 
 ---
 
