@@ -13,7 +13,7 @@ conversion to dementia, under a deliberately conservative, leakage-free evaluati
 findings stand out. First, progression to dementia could be predicted from baseline measures with good
 discrimination in impaired-spectrum cohorts (MCI→Dementia ROC-AUC ≈ 0.83; pooled CN+MCI→AD ≈ 0.88),
 but prediction of decline from full cognitive normality was substantially harder (CN→progression
-≈ 0.66–0.69). Second, the most informative predictors **shifted with disease stage**. Third, ensemble
+≈ 0.65–0.69). Second, the most informative predictors **shifted with disease stage**. Third, ensemble
 methods did **not** meaningfully outperform logistic regression, indicating a largely linear signal.
 Fourth, APOE4 carriage and baseline functional, metabolic, and amyloid measures predicted not only
 *whether* but *how quickly* MCI patients converted.
@@ -91,7 +91,7 @@ value for mechanism, staging, and confirmation.
    conversion rates therefore overstate population risk, and the well-powered results derive largely
    from the impaired end of the spectrum.
 2. **Under-powered CN cohort.** Confirmed CN→progression events were few (74), and conversion from
-   normality is slow (median ≈ 4 years). The modest CN-cohort performance (AUC ≈ 0.66–0.69) should be
+   normality is slow (median ≈ 4 years). The modest CN-cohort performance (AUC ≈ 0.65–0.69) should be
    read as a lower bound reflecting limited events, not as evidence that early signal is absent.
 3. **Diagnostic label noise.** Even with a confirmed-conversion definition, clinical diagnoses carry
    inter-rater variability, and clinically implausible reversions (e.g., dementia→MCI) were present and

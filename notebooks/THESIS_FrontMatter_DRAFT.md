@@ -146,13 +146,14 @@ Results/Conclusions paragraphs, ~330 words, no tables or formulas per the guide.
 | EDA-4 | Correlation matrix of baseline features | — |
 | EDA-5 | Baseline feature distributions by eventual outcome (converter vs stable) | — |
 | 1 | Receiver operating characteristic curves by cohort | — |
-| 2 | Kaplan–Meier estimates of remaining dementia-free, MCI cohort, by APOE4 status | — |
-| 3 | Cox proportional-hazards model of time to MCI → Dementia conversion | — |
-| 4 | Stage-dependent early predictors (permutation importance) | — |
+| 2 | Stage-dependent early predictors (permutation importance) | — |
+| 3 | Kaplan–Meier estimates of remaining dementia-free, MCI cohort, by APOE4 status | — |
+| 4 | Cox proportional-hazards model of time to MCI → Dementia conversion | — |
 | 5 | Subgroup performance (Pooled → AD): fairness check | — |
 
-*Note: figures are labeled EDA-1…EDA-5 (exploratory) and 1…5 (results); renumber sequentially (1–10)
-during final layout if your reviewers prefer a single series.*
+*Results figures are now ordered to match the sequence in which they are first cited in Chapter 4
+(Fig 1 §4.5 → Fig 2 §4.6 → Figs 3–4 §4.7 → Fig 5 §4.11). Exploratory figures are labeled EDA-1…EDA-5;
+renumber the two series into a single 1–10 sequence during final layout if your reviewers prefer.*
 
 ---
 

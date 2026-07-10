@@ -183,9 +183,9 @@ contributes modest, non-redundant signal beyond total tau.
 | EDA-4 | Correlation matrix of baseline features | — |
 | EDA-5 | Baseline feature distributions by eventual outcome (converter vs stable) | — |
 | 1 | Receiver operating characteristic curves by cohort | — |
-| 2 | Kaplan–Meier estimates of remaining dementia-free, MCI cohort, by APOE4 status | — |
-| 3 | Cox proportional-hazards model of time to MCI → Dementia conversion | — |
-| 4 | Stage-dependent early predictors (permutation importance) | — |
+| 2 | Stage-dependent early predictors (permutation importance) | — |
+| 3 | Kaplan–Meier estimates of remaining dementia-free, MCI cohort, by APOE4 status | — |
+| 4 | Cox proportional-hazards model of time to MCI → Dementia conversion | — |
 | 5 | Subgroup performance (Pooled → AD): fairness check | — |
 
 *Note: figures are labeled EDA-1…EDA-5 (exploratory) and 1…5 (results); renumber sequentially (1–10)
@@ -627,10 +627,12 @@ was treated as diagnostic error. This left approximately 1,650 analyzable partic
 two visits.
 
 Because the Alzheimer's Disease Neuroimaging Initiative preferentially enrolls participants who
-already show cognitive concern, the baseline diagnostic distribution was weighted toward impairment:
-792 cognitively normal (CN), 969 mild cognitive impairment (MCI), and 370 dementia at baseline. This
-enrollment pattern is discussed as a limitation (Section 5.7), as it inflates the apparent prevalence
-of conversion relative to a community-based sample.
+already show cognitive concern, the baseline diagnostic distribution was weighted toward impairment.
+Among the **full processed sample of 2,131** participants, 792 were cognitively normal (CN), 969 had
+mild cognitive impairment (MCI), and 370 had dementia at baseline (the ~1,650 analyzable participants
+noted above are the subset of this sample with at least two visits). This enrollment pattern is
+discussed as a limitation (Section 5.7), as it inflates the apparent prevalence of conversion relative
+to a community-based sample.
 
 To respect the longitudinal structure of the data, all predictive models were built at the **patient
 level**: each participant contributed a single record consisting of their **baseline (earliest) visit**,
@@ -738,9 +740,11 @@ cautions against over-interpreting any single feature's coefficient within a cor
 **Figure EDA-5 — Baseline features by eventual outcome (converter vs. stable).** Overlaid,
 density-normalized histograms of eight leading features for participants non-demented at baseline, split
 by whether they later met the confirmed conversion-to-dementia definition (Methods §3.4) versus remained
-stable. Among the 1,761 non-demented-at-baseline participants, future converters and stable participants
-show clearly offset — though substantially overlapping — baseline distributions, with every displayed
-feature differing at p < 10⁻³⁷ (Mann–Whitney *U*). Future converters started with worse function (FAQ
+stable. Among the **1,761 participants non-demented at baseline** (792 CN + 969 MCI), **257** later
+showed a confirmed conversion to dementia and **1,504** remained stable. Future converters and stable
+participants show clearly offset — though substantially overlapping — baseline distributions, with every
+displayed feature differing at p < 10⁻³⁷ (Mann–Whitney *U*). Future converters started with worse
+function (FAQ
 median 4.0 vs 0.0), worse memory (LDELTOTAL 3.0 vs 10.0), worse global cognition (ADAS13 19.7 vs 12.0;
 MOCA 21.0 vs 24.9), lower FDG metabolism (1.2 vs 1.3), smaller hippocampi (6,180 vs 7,203 mm³), and a
 more Alzheimer's-like molecular profile (AV45 1.4 vs 1.1; CSF Aβ42 668 vs 1,168 pg/mL). Critically,
@@ -749,9 +753,11 @@ partitions converters from non-converters. This figure states visually both the 
 difficulty of early prediction: the consistent, highly significant shifts confirm baseline multimodal
 information is genuinely predictive of *future* decline, but the pervasive overlap explains why
 discrimination is good rather than perfect in the impaired-spectrum cohorts and genuinely hard from full
-cognitive normality (Section 4.5). (This pooled non-demented view of 1,761 participants is the union of
-the CN and MCI cohorts analyzed separately in the modeling sections — 74 confirmed CN converters and 228
-confirmed MCI converters — under the same confirmed-conversion definition.)
+cognitive normality (Section 4.5). (This figure is descriptive and uses all 1,761 non-demented baseline
+participants with a to-dementia outcome. The modeling sections instead use the subset with follow-up
+eligibility and cohort-specific outcomes — CN n = 519 with 74 confirmed progressions to MCI **or**
+dementia, and MCI n = 819 with 228 confirmed progressions to dementia — so the descriptive converter
+count here, 257, is not expected to equal the sum of the two modeling-cohort event counts.)
 
 ## 4.3 Impact of evaluation design (data leakage)
 
@@ -767,28 +773,34 @@ use patient-level partitioning to avoid this bias.
 ## 4.4 Conversion labeling and sensitivity analysis
 
 Because diagnostic status fluctuates in ADNI, the definition of "converter" materially affects the
-analysis. Diagnostic reversion (an improvement between visits) occurred in 123 participants (5.8%),
-predominantly MCI → CN (108 occurrences) with some Dementia → MCI (28). Twenty-eight participants
-exhibited the CN → (MCI/Dementia) → CN pattern.
+analysis. Diagnostic reversion (an improvement between consecutive visits) occurred in 123 participants
+(5.8% of the full sample), comprising **136 reversion events** — 108 MCI → CN and 28 Dementia → MCI
+(the difference reflects 13 participants who reverted more than once). The 28 Dementia → MCI cases are
+the clinically implausible improvements excluded during cohort construction (§3.4). A further 18
+participants exhibited the CN → (MCI/Dementia) → CN pattern.
 
-Table 4.2 reports the number of converters under alternative definitions. Requiring a **confirmed**
-transition (worse stage sustained ≥2 consecutive visits) reduced converter counts by roughly a
-quarter to a third relative to a naïve last-visit definition, removing single-visit fluctuations. The
-confirmed definition was pre-specified as the primary outcome for all subsequent models.
+Table 4.2 reports the number of converters under alternative outcome definitions, all computed on the
+**same eligible cohorts used for modeling** (MCI n = 819; CN n = 519), so the confirmed row matches the
+event counts carried into every subsequent analysis. Requiring a **confirmed** transition (worse stage
+sustained ≥2 consecutive visits) reduced converter counts by roughly 30% relative to a naïve last-visit
+definition, removing single-visit fluctuations. The confirmed definition was pre-specified as the
+primary outcome for all subsequent models.
 
-**Table 4.2 — Converters by outcome definition**
+**Table 4.2 — Converters by outcome definition** (denominators: eligible MCI n = 819, CN n = 519)
 
 | Definition | MCI→Dementia | CN→MCI/Dementia |
 |---|---|---|
-| Last-visit only | 329 (39%) | 110 (21%) |
-| Ever reached worse stage | 340 (40%) | 120 (22%) |
-| **Confirmed (≥2 visits) — primary** | **237 (28%)** | **78 (15%)** |
-| Confirmed within 36 months | 181 (29% of eligible) | 27 (7% of eligible) |
-| Confirmed within 24 months | 141 (20% of eligible) | 18 (4% of eligible) |
+| Last-visit only | 321 (39%) | 106 (20%) |
+| Ever reached worse stage | 321 (39%) | 116 (22%) |
+| **Confirmed (≥2 visits) — primary** | **228 (28%)** | **74 (14%)** |
+| Confirmed within 36 months | 177 (22%) | 26 (5%) |
+| Confirmed within 24 months | 138 (17%) | 17 (3%) |
 
-Short fixed-horizon definitions (24/36 months) were inappropriate for the CN cohort because CN→MCI
-conversion is slow (median time to confirmed conversion ≈ 4 years); the confirmed-any-time definition
-was therefore used, with time-to-event modeled explicitly via survival analysis (Section 4.7).
+For the MCI cohort, the last-visit and ever-reached counts coincide (321) because dementia is a
+near-absorbing state once the implausible reversions are removed. Short fixed-horizon definitions
+(24/36 months) were inappropriate for the CN cohort because CN→MCI conversion is slow (median time to
+confirmed conversion ≈ 4 years); the confirmed-any-time definition was therefore used, with time-to-event
+modeled explicitly via survival analysis (Section 4.7).
 
 ## 4.5 Predictive performance across cohorts and algorithms
 
@@ -825,7 +837,7 @@ qualifies the study hypothesis (Section 5.3).
 ## 4.6 Predictors of conversion and their stage dependence
 
 Permutation importance (mean decrease in ROC-AUC on held-out folds) was used to rank predictors within
-each cohort _[Fig 4 — fig4_predictors.png]_. This complements the exploratory finding that converters
+each cohort _[Fig 2 — fig2_predictors.png]_. This complements the exploratory finding that converters
 and stable participants already separate at baseline on several of these measures (Section 4.2, Figure
 EDA-5). Two complementary feature-selection methods were also applied to the pooled cohort: univariate
 selection (ANOVA F-test, SelectKBest) and Recursive Feature Elimination with logistic regression.
@@ -848,8 +860,9 @@ memory** measures led — hippocampal volume, intracranial volume, memory (LDELT
 cognition (MOCA, MMSE) — consistent with early medial-temporal atrophy. Closer to dementia (MCI stage),
 the strongest predictors were measures of **daily function (FAQ), brain metabolism (FDG), and amyloid
 burden (AV45, ABETA)**. The corrected CSF phosphorylated-tau measure (PTAU) entered the models as a
-**mid-tier predictor** (Random Forest importance rank ≈ 11–12 of 33; ranked 9th in the pooled cohort),
-consistent with its known but partly redundant relationship to total tau (Methods §3.12).
+**mid-tier predictor**: it ranked ≈ 11th–12th of 33 features by Random Forest permutation importance in
+the MCI→Dementia model and 9th in the pooled model — mid-pack in both cases, consistent with its known
+but partly redundant relationship to total tau (Methods §3.12).
 
 Two complementary selection methods were applied to the pooled cohort: SelectKBest (ANOVA F-test) chose
 mPACCtrailsB, FAQ, ADAS13, mPACCdigit, LDELTOTAL, CDRSB, AV45, MOCA, RAVLT-immediate, and FDG; RFE
@@ -865,7 +878,7 @@ convergence across selection methods.
 
 For the MCI cohort (819 participants; 228 confirmed conversions; 591 right-censored at last visit),
 time from baseline to first confirmed dementia was modeled. Kaplan–Meier estimates stratified by APOE4
-status _[Fig 2 — fig2_km_apoe4.png]_ showed markedly faster progression among APOE4 carriers:
+status _[Fig 3 — fig3_km_apoe4.png]_ showed markedly faster progression among APOE4 carriers:
 
 **Table 4.5 — Kaplan–Meier: probability of remaining dementia-free**
 
@@ -876,7 +889,7 @@ status _[Fig 2 — fig2_km_apoe4.png]_ showed markedly faster progression among 
 | All MCI | 81% | 75% | 68% |
 
 A Cox proportional-hazards model (features standardized; hazard ratios per 1 SD) identified independent
-predictors of conversion timing _[Fig 3 — fig3_cox_forest.png]_. Higher **FAQ (HR ≈ 1.41), ADAS13
+predictors of conversion timing _[Fig 4 — fig4_cox_forest.png]_. Higher **FAQ (HR ≈ 1.41), ADAS13
 (1.34), and amyloid AV45 (1.29)** were associated with faster conversion, while higher **FDG (0.72),
 verbal memory (RAVLT-immediate 0.76; LDELTOTAL 0.79), and hippocampal volume (0.79)** were associated
 with slower conversion. These timing predictors align with the classification-based importance
@@ -894,10 +907,18 @@ FAQ, hippocampal volume, and APOE4) capture most of the available predictive sig
 
 Linear mixed-effects models (random intercept and slope per participant) characterized the rate of
 cognitive decline by baseline group. All groups worsened over time, and the dementia group declined
-fastest: ADAS13 increased by ≈ +2.2 points/year in the dementia group versus ≈ +1.7 points/year in
-the CN group; CDRSB showed the same ordering. Absolute CN slopes should be interpreted with caution,
-as the CN group contains future converters, but the relative ordering is consistent with expected
-disease progression.
+fastest: ADAS13 rose by ≈ +2.22 points/year in the dementia group, versus ≈ +1.73 (CN) and ≈ +1.62
+(MCI); CDRSB showed the same pattern (Dementia +0.67, CN +0.49, MCI +0.46 points/year). The dementia
+group is clearly the fastest-declining, while the CN and MCI group slopes are essentially
+indistinguishable from each other.
+
+These absolute slopes should be interpreted with strong caution and are **not** comparable to
+community-based estimates of cognitive decline in healthy older adults (where cognitively normal ADAS13
+slopes are typically well under +0.5 points/year). The magnitude here is inflated by two features of the
+design: ADNI's CN group is an enriched, help-seeking sample that includes a substantial fraction of
+future converters, and the random-slope model attributes the accelerating decline of those eventual
+converters to the group-average slope. The finding should therefore be read as a within-study relative
+ordering, not as an epidemiological decline rate.
 
 ## 4.10 Detailed classification performance and calibration
 
@@ -995,7 +1016,7 @@ conversion to dementia, under a deliberately conservative, leakage-free evaluati
 findings stand out. First, progression to dementia could be predicted from baseline measures with good
 discrimination in impaired-spectrum cohorts (MCI→Dementia ROC-AUC ≈ 0.83; pooled CN+MCI→AD ≈ 0.88),
 but prediction of decline from full cognitive normality was substantially harder (CN→progression
-≈ 0.66–0.69). Second, the most informative predictors **shifted with disease stage**. Third, ensemble
+≈ 0.65–0.69). Second, the most informative predictors **shifted with disease stage**. Third, ensemble
 methods did **not** meaningfully outperform logistic regression, indicating a largely linear signal.
 Fourth, APOE4 carriage and baseline functional, metabolic, and amyloid measures predicted not only
 *whether* but *how quickly* MCI patients converted.
@@ -1059,7 +1080,7 @@ predictive signal available from the full multimodal panel. This is encouraging 
 where full biomarker and imaging panels are often unavailable, and it dovetails with the finding that a
 linear model suffices. Prioritizing functional and memory assessment, together with APOE4 genotyping,
 may offer a practical, low-cost first-pass stratification of MCI patients by conversion risk. The
-feature-group ablation (Section 4.11) reinforces this: cognitive and functional measures alone reached
+feature-group ablation (Section 4.12) reinforces this: cognitive and functional measures alone reached
 an AUC of 0.855 versus 0.88 for the full multimodal panel, and removing any single imaging or biomarker
 modality barely changed performance. Because these modalities are substantially inter-correlated, the
 more expensive and invasive assessments (PET, lumbar puncture) added little *incremental* discrimination
@@ -1073,7 +1094,7 @@ value for mechanism, staging, and confirmation.
    conversion rates therefore overstate population risk, and the well-powered results derive largely
    from the impaired end of the spectrum.
 2. **Under-powered CN cohort.** Confirmed CN→progression events were few (74), and conversion from
-   normality is slow (median ≈ 4 years). The modest CN-cohort performance (AUC ≈ 0.66–0.69) should be
+   normality is slow (median ≈ 4 years). The modest CN-cohort performance (AUC ≈ 0.65–0.69) should be
    read as a lower bound reflecting limited events, not as evidence that early signal is absent.
 3. **Diagnostic label noise.** Even with a confirmed-conversion definition, clinical diagnoses carry
    inter-rater variability, and clinically implausible reversions (e.g., dementia→MCI) were present and
@@ -1085,7 +1106,7 @@ value for mechanism, staging, and confirmation.
    rather than a limitation, though it underscores the importance of biomarker-scale validation.
 5. **Subgroup performance disparities.** Discrimination was equitable by sex but lower for
    less-educated participants (AUC 0.83 vs 0.90), older participants (0.82 vs 0.91 at age ≥ 75), and
-   APOE4 carriers (0.84 vs 0.87; Section 4.10). These gaps likely reflect ADNI's education-skewed
+   APOE4 carriers (0.84 vs 0.87; Section 4.11). These gaps likely reflect ADNI's education-skewed
    enrollment and greater heterogeneity among older, higher-risk patients. They caution against uniform
    deployment and motivate subgroup-aware calibration and validation before clinical use.
 6. **Single-cohort, internal validation only.** All estimates derive from ADNI with cross-validation;
@@ -1116,10 +1137,6 @@ value for mechanism, staging, and confirmation.
 - Every claim traces to notebooks 06–08 and the figures; no numbers are asserted beyond what was computed.
 - The p-tau markers have been resolved following the CSF p-tau181 correction (Methods §3.12) — none
   change the conclusions, they only potentially strengthen the tau-pathology story.
-
-
-
----
 
 
 # Chapter 6 — Conclusion
