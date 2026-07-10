@@ -117,7 +117,10 @@ Results/Conclusions paragraphs, ~330 words, no tables or formulas per the guide.
 | 5.8 Future Directions | — |
 | **Chapter 6 — Conclusion** | — |
 | References | — |
-| Appendices *(optional)* | — |
+| **Appendices** | — |
+| Appendix A — Model Specifications and Hyperparameters | — |
+| Appendix B — Feature Dictionary (33 Baseline Predictors) | — |
+| Appendix C — Supplementary Results | — |
 
 ---
 
