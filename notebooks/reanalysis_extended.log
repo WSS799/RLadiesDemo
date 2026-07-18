@@ -1,0 +1,59 @@
+### Permutation importance (ICV-residualized, fold-wise impute, RF) ###
+
+CN->progression top10:
+WholeBrain               0.0277
+LDELTOTAL                0.0108
+Hippocampus              0.0081
+mPACCdigit               0.0071
+RAVLT.learning           0.0062
+CDRSB                    0.0057
+Entorhinal               0.0055
+RAVLT.forgetting         0.0042
+RAVLT.perc.forgetting    0.0029
+MMSE                     0.0022
+
+MCI->Dementia top10:
+FAQ                0.0226
+FDG                0.0142
+mPACCtrailsB       0.0099
+AV45               0.0068
+ADAS13             0.0065
+AGE                0.0064
+RAVLT.immediate    0.0051
+LDELTOTAL          0.0050
+ABETA              0.0043
+CDRSB              0.0036
+
+Pooled->AD top10:
+FAQ             0.0161
+AV45            0.0070
+ABETA           0.0034
+CDRSB           0.0032
+FDG             0.0030
+ADAS13          0.0029
+mPACCtrailsB    0.0025
+AGE             0.0025
+MidTemp         0.0020
+WholeBrain      0.0018
+
+### SMOTE-NC sensitivity (vs primary no-SMOTE) ###
+  CN->progression: RF primary 0.718 vs SMOTE 0.716 | LR primary 0.677 vs SMOTE 0.660
+  MCI->Dementia: RF primary 0.831 vs SMOTE 0.831 | LR primary 0.832 vs SMOTE 0.823
+  Pooled->AD: RF primary 0.882 vs SMOTE 0.886 | LR primary 0.882 vs SMOTE 0.869
+
+### Complete-case sensitivity (rows with all predictors observed) ###
+  CN->progression: complete cases n=198/519 events=14
+     complete-case RF AUC=0.749 LR AUC=0.731
+  MCI->Dementia: complete cases n=304/819 events=52
+     complete-case RF AUC=0.900 LR AUC=0.889
+  Pooled->AD: complete cases n=502/1338 events=53
+     complete-case RF AUC=0.928 LR AUC=0.904
+
+### Observed-only corr(PTAU,TAU) = 0.978 (n=2103); all-rows = 0.986
+
+### Paired AUC comparison (bootstrap 95% CI of difference) ###
+  CN->progression: RandomForest 0.713 vs LogReg 0.678; diff 95%CI [-0.027,+0.091] -> NOT distinguishable
+  MCI->Dementia: LogReg 0.831 vs LogReg 0.831; diff 95%CI [+0.000,+0.000] -> differ
+  Pooled->AD: LogReg 0.882 vs LogReg 0.882; diff 95%CI [+0.000,+0.000] -> differ
+
+Saved reanalysis_extended.json

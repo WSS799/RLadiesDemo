@@ -1,0 +1,116 @@
+{
+  "importance": {
+    "CN->progression": {
+      "WholeBrain": 0.0277,
+      "LDELTOTAL": 0.0108,
+      "Hippocampus": 0.0081,
+      "mPACCdigit": 0.0071,
+      "RAVLT.learning": 0.0062,
+      "CDRSB": 0.0057,
+      "Entorhinal": 0.0055,
+      "RAVLT.forgetting": 0.0042,
+      "RAVLT.perc.forgetting": 0.0029,
+      "MMSE": 0.0022
+    },
+    "MCI->Dementia": {
+      "FAQ": 0.0226,
+      "FDG": 0.0142,
+      "mPACCtrailsB": 0.0099,
+      "AV45": 0.0068,
+      "ADAS13": 0.0065,
+      "AGE": 0.0064,
+      "RAVLT.immediate": 0.0051,
+      "LDELTOTAL": 0.005,
+      "ABETA": 0.0043,
+      "CDRSB": 0.0036
+    },
+    "Pooled->AD": {
+      "FAQ": 0.0161,
+      "AV45": 0.007,
+      "ABETA": 0.0034,
+      "CDRSB": 0.0032,
+      "FDG": 0.003,
+      "ADAS13": 0.0029,
+      "mPACCtrailsB": 0.0025,
+      "AGE": 0.0025,
+      "MidTemp": 0.002,
+      "WholeBrain": 0.0018
+    }
+  },
+  "smote_sensitivity": {
+    "CN->progression": {
+      "primary": {
+        "RF": 0.7180989978742788,
+        "LR": 0.6771029456422715
+      },
+      "smote": {
+        "RF": 0.7155177649559673,
+        "LR": 0.6597327664743395
+      }
+    },
+    "MCI->Dementia": {
+      "primary": {
+        "RF": 0.8306394157983791,
+        "LR": 0.831626443435153
+      },
+      "smote": {
+        "RF": 0.8312924867159438,
+        "LR": 0.8226096120165048
+      }
+    },
+    "Pooled->AD": {
+      "primary": {
+        "RF": 0.881638295321725,
+        "LR": 0.8818256061378008
+      },
+      "smote": {
+        "RF": 0.8863323043725837,
+        "LR": 0.8690659933467199
+      }
+    }
+  },
+  "complete_case": {
+    "CN->progression": {
+      "n": 198,
+      "events": 14,
+      "RF_auc": 0.749,
+      "LR_auc": 0.731
+    },
+    "MCI->Dementia": {
+      "n": 304,
+      "events": 52,
+      "RF_auc": 0.9,
+      "LR_auc": 0.889
+    },
+    "Pooled->AD": {
+      "n": 502,
+      "events": 53,
+      "RF_auc": 0.928,
+      "LR_auc": 0.904
+    }
+  },
+  "paired": {
+    "CN->progression": {
+      "best": "RandomForest",
+      "auc_best": 0.713,
+      "auc_LR": 0.678,
+      "diff_lo": -0.027,
+      "diff_hi": 0.091
+    },
+    "MCI->Dementia": {
+      "best": "LogReg",
+      "auc_best": 0.831,
+      "auc_LR": 0.831,
+      "diff_lo": 0.0,
+      "diff_hi": 0.0
+    },
+    "Pooled->AD": {
+      "best": "LogReg",
+      "auc_best": 0.882,
+      "auc_LR": 0.882,
+      "diff_lo": 0.0,
+      "diff_hi": 0.0
+    }
+  },
+  "ptau_tau_observed": 0.978
+}
