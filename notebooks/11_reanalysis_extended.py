@@ -104,9 +104,7 @@ for name in cohorts:
     y=np.array(res[name]['_y']); oof=res[name]['_oof']
     # top model vs LogReg
     aucs={m:roc_auc_score(y,np.array(p)) for m,p in oof.items()}
-    best=max(aucs,key=aucs.get)
-    for comp in [best,'LogReg']:
-        pass
+    best='RandomForest'   # fixed comparator: RF vs LogReg (honest paired test, not best-vs-self)
     diffs=[]
     idx=np.arange(len(y)); pa=np.array(oof[best]); pb=np.array(oof['LogReg'])
     for _ in range(2000):

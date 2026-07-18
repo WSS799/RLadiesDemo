@@ -35,7 +35,7 @@ Per-model AUC:
 | Logistic Regression | 0.68 | **0.83** | **0.88** |
 | Random Forest | **0.71** | 0.83 | 0.88 |
 | XGBoost | 0.69 | 0.83 | 0.88 |
-| SVM (RBF) | 0.70 | 0.83 | 0.88 |
+| SVM (RBF) | 0.70 | 0.82 | 0.87 |
 | K-Nearest Neighbors | 0.58 | 0.80 | 0.83 |
 | Neural Net (MLP) | 0.63 | 0.78 | 0.84 |
 
@@ -77,12 +77,10 @@ ABETA)**.
 - **Kaplan–Meier by APOE4 (OBSERVED-only genotype; 1 imputed excluded):** dementia-free at
   5 yr = **80% (non-carriers) vs 55% (carriers)**; log-rank **p = 7.2×10⁻¹²**. (Unchanged;
   APOE4 was essentially fully observed in this cohort.)
-- **Cox PH (HR per 1 SD, ICV-residualized):** faster conversion — AV45 1.43, FAQ 1.38,
-  ADAS13 1.25 (all p<0.05); slower — FDG 0.73, Hippocampus 0.75, RAVLT-immediate 0.75
-  (all p<0.05). Same directions as before.
+- **Cox PH (HR per 1 SD with 95% CI, ICV-residualized; C-index 0.86):** faster — AV45 1.42 (1.12–1.81), FAQ 1.38, ADAS13 1.25; slower — FDG 0.73 (0.60–0.88), Hippocampus 0.75 (0.61–0.91), RAVLT-immediate 0.75 (0.59–0.96). **Six covariates significant at p<0.05** (AV45, FAQ, ADAS13, RAVLT-immediate, Hippocampus, FDG); LDELTOTAL (p=0.051) and APOE4 (p=0.053) fall just short.
 
 ## 5. Parsimonious risk score (MCI → Dementia)
-7 variables, fold-wise imputed, cross-validated **AUC = 0.81**. Points per +1 SD:
+7 variables, fold-wise imputed. Cross-validated AUC of the logistic model = 0.814; **the integer scorecard itself (points derived on the training fold, scored on the test fold) cross-validates to AUC = 0.815** — so the point system, not merely the underlying model, is validated. Points per +1 SD:
 ADAS13 +10, FAQ +10, Hippocampus −10, APOE4 +6, CDR-SB +4, MMSE −3, Age −3.
 
 ## 6. Sensitivity analyses (robustness)
@@ -95,9 +93,7 @@ ADAS13 +10, FAQ +10, Hippocampus −10, APOE4 +6, CDR-SB +4, MMSE −3, Age −3
   robustness check, not the primary estimate.)
 - **Observed-only PTAU–TAU correlation = 0.978** (n = 2,103 both-observed), vs 0.986 with
   imputed values — the tau–tau correlation is genuine, not an imputation artifact.
-- **Paired model comparison (bootstrap AUC difference):** in MCI and pooled, logistic
-  regression was the top or tied-top model; in CN, RF vs LogReg difference 95% CI
-  [−0.03, +0.09] includes 0. **No model significantly outperformed logistic regression.**
+- **Paired model comparison (RF vs. logistic regression, bootstrap 95% CI of the AUC difference):** CN [−0.027, +0.091], MCI [−0.018, +0.013], pooled [−0.012, +0.011] — every interval includes zero. **No evaluated model exceeded logistic regression's point estimate.**
 
 ## 7. Subgroup / fairness (Pooled → AD; overall 0.88)
 | Subgroup | n | events | AUC |

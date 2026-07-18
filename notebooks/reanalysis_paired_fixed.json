@@ -1,0 +1,20 @@
+{
+  "CN->progression": {
+    "rf": 0.713,
+    "lr": 0.678,
+    "diff_lo": -0.027,
+    "diff_hi": 0.091
+  },
+  "MCI->Dementia": {
+    "rf": 0.829,
+    "lr": 0.831,
+    "diff_lo": -0.018,
+    "diff_hi": 0.013
+  },
+  "Pooled->AD": {
+    "rf": 0.881,
+    "lr": 0.882,
+    "diff_lo": -0.012,
+    "diff_hi": 0.011
+  }
+}

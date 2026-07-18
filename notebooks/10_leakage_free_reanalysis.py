@@ -71,7 +71,7 @@ def models():
      'LogReg': LogisticRegression(max_iter=2000, class_weight='balanced'),
      'RandomForest': RandomForestClassifier(n_estimators=400, max_depth=10, class_weight='balanced', random_state=RS, n_jobs=-1),
      'XGBoost': XGBClassifier(n_estimators=300, max_depth=4, learning_rate=0.05, subsample=0.8, eval_metric='logloss', random_state=RS, n_jobs=-1),
-     'SVM(RBF)': SVC(kernel='rbf', C=1, class_weight='balanced', probability=False),
+     'SVM(RBF)': SVC(kernel='rbf', C=1, class_weight='balanced', probability=True, random_state=RS),
      'KNN': KNeighborsClassifier(n_neighbors=7),
      'NeuralNet(MLP)': MLPClassifier(hidden_layer_sizes=(32,16), max_iter=400, random_state=RS),
     }
@@ -118,11 +118,7 @@ def run_cohort(name, sub, y, use_smote=False):
         for mname, clf in models().items():
             c = clf.__class__(**clf.get_params())
             c.fit(Xtr_s, ytr)
-            if mname == 'SVM(RBF)':
-                p = c.decision_function(Xte_s)
-                p = (p - p.min())/(p.max()-p.min()+1e-9)
-            else:
-                p = c.predict_proba(Xte_s)[:,1]
+            p = c.predict_proba(Xte_s)[:,1]
             oof[mname][te] = p
     return oof
 

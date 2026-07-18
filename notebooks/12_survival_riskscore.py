@@ -49,7 +49,7 @@ def logrank(sv):
         if n<=1: continue
         E1+=d*n1/n; O1+=d1; V+=d*(n1/n)*(1-n1/n)*(n-d)/(n-1)
     chi=(O1-E1)**2/V; return chi, stats.chi2.sf(chi,1)
-svo=surv.dropna(subset=['apoe'])
+svo=surv[(surv.apoe.notna())&(surv.apoe_imp==0)]   # FIX: truly observed-only (exclude imputed)
 print(f"MCI survival: n={len(surv)} events={int(surv.event.sum())} censored={int((surv.event==0).sum())}")
 print(f"KM by APOE4 (OBSERVED-only, n={len(svo)}, imputed-excluded={int(surv.apoe_imp.sum())}):")
 for nm,grp in [('APOE4-neg',svo[svo.apoe==0]),('APOE4-pos',svo[svo.apoe>=1]),('All',svo)]:
@@ -72,6 +72,26 @@ res=sm.PHReg(mci['time'].values, Xz.values, status=mci['event'].values, ties='ef
 HR=pd.DataFrame({'HR':np.exp(res.params),'p':res.pvalues},index=covs).sort_values('HR',ascending=False)
 print("\nCox PH (HR per 1 SD, ICV-residualized, fold-consistent single imputation):")
 print(HR.round(3).to_string())
+cint=pd.DataFrame(np.exp(res.conf_int()), index=covs, columns=['lo','hi'])
+HR['lo']=cint['lo']; HR['hi']=cint['hi']
+HR=HR.sort_values('HR',ascending=False)
+nsig=int((HR['p']<0.05).sum())
+print("\nCox PH (HR per 1 SD with 95% CI, ICV-residualized):")
+for cov,row in HR.iterrows():
+    print(f"  {cov:16s} HR={row['HR']:.2f} (95% CI {row['lo']:.2f}-{row['hi']:.2f}) p={row['p']:.3f}")
+print(f"Significant at p<0.05: {nsig} covariates: {list(HR.index[HR['p']<0.05])}")
+# Harrell C-index
+lp=(Xz.values@res.params)
+t=mci['time'].values; e=mci['event'].values; conc=0; disc=0
+import itertools
+idx=np.where(e==1)[0]
+for i in idx:
+    comp=(t>t[i]); 
+    conc+=np.sum((lp[i]>lp[comp]))  # higher risk (lp) should have shorter time
+    disc+=np.sum((lp[i]<lp[comp]))
+cindex=conc/(conc+disc) if (conc+disc)>0 else float('nan')
+print(f"Cox C-index (concordance) = {cindex:.3f}")
+
 print(f"C-index (concordance) = {res.summary().tables[0] if False else ''}")
 # concordance
 try:
@@ -100,6 +120,22 @@ for tr,te in skf.split(X,ym):
     clf=LogisticRegression(max_iter=2000,class_weight='balanced').fit(sc.transform(Xtr),ym[tr])
     oof[te]=clf.predict_proba(sc.transform(Xte))[:,1]
 print(f"7-variable risk score AUC (fold-wise) = {roc_auc_score(ym,oof):.3f}")
+# FIX3: cross-validate the INTEGER SCORECARD itself (points derived on train, scored on test)
+oof_card=np.full(len(ym),np.nan)
+for tr,te in skf.split(X,ym):
+    Xtr,Xte=X.iloc[tr].copy(),X.iloc[te].copy()
+    im2=IterativeImputer(estimator=BayesianRidge(),max_iter=5,random_state=RS)
+    Xtr=pd.DataFrame(im2.fit_transform(Xtr),columns=X.columns); Xte=pd.DataFrame(im2.transform(Xte),columns=X.columns)
+    ic=Xtr['ICV'].values.reshape(-1,1); lrr=LinearRegression().fit(ic,Xtr['Hippocampus'])
+    Xtr['Hippocampus']-=lrr.predict(ic); Xte['Hippocampus']-=lrr.predict(Xte['ICV'].values.reshape(-1,1))
+    Xtr=Xtr.drop(columns=['ICV']); Xte=Xte.drop(columns=['ICV'])
+    mu,sd=Xtr.mean(),Xtr.std()
+    Ztr=(Xtr-mu)/sd; Zte=(Xte-mu)/sd
+    lc=LogisticRegression(max_iter=2000,class_weight='balanced').fit(Ztr,ym[tr])
+    cf=pd.Series(lc.coef_[0],index=acc); pts=(cf/cf.abs().max()*10).round()
+    score_te=(Zte*pts).sum(axis=1)
+    oof_card[te]=score_te.values
+print(f"7-variable INTEGER SCORECARD AUC (fold-wise, points derived on train) = {roc_auc_score(ym,oof_card):.3f}")
 # coefficients on full data for points
 im=IterativeImputer(estimator=BayesianRidge(),max_iter=10,random_state=RS)
 Xf=pd.DataFrame(im.fit_transform(X),columns=X.columns); ic=Xf['ICV'].values.reshape(-1,1)
