@@ -1,0 +1,86 @@
+{
+  "km": {
+    "neg": {
+      "2": 0.8797080588780358,
+      "3": 0.8506895495182025,
+      "5": 0.79708812763636
+    }
+  },
+  "logrank_p": 7.532902997425614e-12,
+  "cox_HR": {
+    "HR": {
+      "AV45": 1.425,
+      "FAQ": 1.38,
+      "ADAS13": 1.249,
+      "APOE4": 1.16,
+      "CDRSB": 1.14,
+      "PTEDUCAT": 1.072,
+      "MMSE": 0.929,
+      "MOCA": 0.907,
+      "ABETA": 0.871,
+      "AGE": 0.861,
+      "LDELTOTAL": 0.829,
+      "RAVLT.immediate": 0.753,
+      "Hippocampus": 0.746,
+      "FDG": 0.73
+    },
+    "p": {
+      "AV45": 0.004,
+      "FAQ": 0.0,
+      "ADAS13": 0.042,
+      "APOE4": 0.053,
+      "CDRSB": 0.082,
+      "PTEDUCAT": 0.316,
+      "MMSE": 0.368,
+      "MOCA": 0.46,
+      "ABETA": 0.318,
+      "AGE": 0.065,
+      "LDELTOTAL": 0.051,
+      "RAVLT.immediate": 0.02,
+      "Hippocampus": 0.004,
+      "FDG": 0.001
+    },
+    "lo": {
+      "AV45": 1.121,
+      "FAQ": 1.213,
+      "ADAS13": 1.009,
+      "APOE4": 0.998,
+      "CDRSB": 0.984,
+      "PTEDUCAT": 0.935,
+      "MMSE": 0.792,
+      "MOCA": 0.699,
+      "ABETA": 0.665,
+      "AGE": 0.734,
+      "LDELTOTAL": 0.686,
+      "RAVLT.immediate": 0.592,
+      "Hippocampus": 0.61,
+      "FDG": 0.605
+    },
+    "hi": {
+      "AV45": 1.811,
+      "FAQ": 1.572,
+      "ADAS13": 1.546,
+      "APOE4": 1.348,
+      "CDRSB": 1.32,
+      "PTEDUCAT": 1.229,
+      "MMSE": 1.09,
+      "MOCA": 1.175,
+      "ABETA": 1.142,
+      "AGE": 1.009,
+      "LDELTOTAL": 1.001,
+      "RAVLT.immediate": 0.956,
+      "Hippocampus": 0.913,
+      "FDG": 0.882
+    }
+  },
+  "riskscore_auc": 0.814,
+  "risk_points": {
+    "AGE": -3,
+    "APOE4": 6,
+    "MMSE": -3,
+    "FAQ": 10,
+    "CDRSB": 4,
+    "Hippocampus": -10,
+    "ADAS13": 10
+  }
+}

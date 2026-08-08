@@ -1,0 +1,72 @@
+{
+  "ablation": {
+    "full": 0.882,
+    "cognitive": {
+      "alone": 0.854,
+      "removed": 0.85,
+      "delta": -0.032
+    },
+    "MRI": {
+      "alone": 0.77,
+      "removed": 0.875,
+      "delta": -0.006
+    },
+    "PET": {
+      "alone": 0.788,
+      "removed": 0.883,
+      "delta": 0.002
+    },
+    "CSF": {
+      "alone": 0.761,
+      "removed": 0.884,
+      "delta": 0.003
+    },
+    "demo_gen": {
+      "alone": 0.658,
+      "removed": 0.878,
+      "delta": -0.004
+    }
+  },
+  "subgroup": {
+    "Male": {
+      "n": 737,
+      "events": 142,
+      "auc": 0.878
+    },
+    "Female": {
+      "n": 601,
+      "events": 102,
+      "auc": 0.881
+    },
+    "APOE4-neg": {
+      "n": 771,
+      "events": 83,
+      "auc": 0.879
+    },
+    "APOE4-pos": {
+      "n": 567,
+      "events": 161,
+      "auc": 0.845
+    },
+    "Education<16": {
+      "n": 447,
+      "events": 92,
+      "auc": 0.84
+    },
+    "Education>=16": {
+      "n": 891,
+      "events": 152,
+      "auc": 0.903
+    },
+    "Age<75": {
+      "n": 767,
+      "events": 134,
+      "auc": 0.914
+    },
+    "Age>=75": {
+      "n": 571,
+      "events": 110,
+      "auc": 0.835
+    }
+  }
+}
